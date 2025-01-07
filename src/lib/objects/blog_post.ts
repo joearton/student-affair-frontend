@@ -3,34 +3,27 @@ import { DateTime } from 'luxon';
 import { htmlToText } from 'html-to-text';
 
 
-export async function get_posts({ search = '', categories = [], tags = [], slug = '', id = '', limit = 10, offset = 0 } = {}) {
+export async function get_posts({ search = '', categories = '', tags = '', slug = '', id = '', offset = "0", limit = 10} = {}) {
     const params: { 
         search?     : string;
-        categories? : string[];
-        tags?       : string[];
+        categories? : string;
+        tags?       : string;
         slug?       : string;
         id?         : string;
+        offset?     : string;
         limit?      : number;
-        offset?     : number;
     } = {};
     
     if (search) params.search = search;
-    if (categories.length) params.categories = categories;
-    if (tags.length) params.tags = tags;
+    if (categories) params.categories = categories;
+    if (tags) params.tags = tags;
     if (slug) params.slug = slug;
     if (id) params.id = id; 
-    if (limit) params.limit = limit;
     if (offset) params.offset = offset;
+    if (limit) params.limit = limit;
 
     // Menyusun endpoint dengan query string
-    const query_string = new URLSearchParams(Object.entries(params).reduce((acc, [key, value]) => {
-        if (Array.isArray(value)) {
-            value.forEach(val => acc.append(key, val));
-        } else {
-            acc.append(key, String(value));
-        }
-        return acc;
-    }, new URLSearchParams())).toString();
+    const query_string = new URLSearchParams(params as Record<string, string>).toString();
     const endpoint = `posts/?${query_string}`;
 
     const response = await api_request(endpoint, 'GET');

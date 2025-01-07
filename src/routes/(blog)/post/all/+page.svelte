@@ -7,43 +7,67 @@
     import { get_categories } from '$lib/objects/blog_category';
     import { get_tags } from '$lib/objects/blog_tags';
 
-    let response: {
-        results: Post[],
-        previous: string,
-        next: string,
-        count: string,
-        limit: number,
-    }
+    let response = $state({
+        results: [],
+        previous: '',
+        next: '',
+        count: 0,
+        offset: "0",
+        limit: 10,
+    });
 
-    let searchQuery = $state('');
-    let isLoading = $state(true);
+    let filter_query = $state('');
+    let filter_cats  = $state([]);
+    let filter_tags  = $state([]);
+    let is_loading = $state(true);
     let posts: Post[] = $state([]);
     let categories: Category[] = $state([]);
     let tags: Tag[] = $state([]);
 
-    async function updatePost(offset:number = 0) {
+    // pagination variable
+    let previous_offset:string = "0";
+    let next_offset:string = "0";
+
+    function update_offsets() {
+        if (response.previous) {
+            previous_offset = new URL(response.previous).searchParams.get('offset') || "0";
+        }
+
+        if (response.next) {
+            next_offset = new URL(response.next).searchParams.get('offset') || "0";
+        }
+    }
+
+    async function update_post(offset:string = "0") {
         try {
             response = await get_posts({
-                search: query,
-                offset: offset
-            });
+                search: filter_query,
+                categories: filter_cats.join(','),
+                tags: filter_tags.join(','),
+                offset: offset,
+            })
             posts = response.results;
         } catch (error) {
             console.error('Error fetching posts:', error);
         } finally {
-            isLoading = false;
+            update_offsets();
+            is_loading = false;
         }
     }
+
+
+    function handle_post_filter() {
+        update_post();
+    }
+    
 
     onMount(async () => {
         categories = await get_categories();
         tags = await get_tags();
-        await updatePost();
+        await update_post();
     });
 
-    function handlePostFilter() {
-        updatePost(searchQuery);
-    }
+
 </script>
 
 
@@ -54,7 +78,7 @@
                 <div class="post-sidebar shadow-sm py-4 px-4 bg-light">
                     <!-- Search Bar -->
                     <div class="post-search mb-4">
-                        <input oninput={handlePostFilter} bind:value={searchQuery} type="text" class="form-control" placeholder="Search posts">
+                        <input oninput={handle_post_filter} bind:value={filter_query} type="text" class="form-control" placeholder="Search posts">
                     </div>
 
                     <!-- Categories Section -->
@@ -62,7 +86,7 @@
                         <h5 class="mb-3">Categories</h5>
                         {#each categories as category}
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" value={category.id} id="cat-{category.id}" />
+                                <input class="form-check-input" type="checkbox" value={category.id} id="cat-{category.id}" bind:group={filter_cats} onchange={handle_post_filter} />
                                 <label class="form-check-label" for="cat-{category.id}">
                                     {category.name}
                                 </label>
@@ -75,7 +99,7 @@
                         <h5 class="mb-3">Tags</h5>
                         {#each tags as tag}
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value={tag.id} id="tag-{tag.id}" />
+                                <input class="form-check-input" type="checkbox" value={tag.id} id="tag-{tag.id}" bind:group={filter_tags} onchange={handle_post_filter} />
                                 <label class="form-check-label" for="tag-{tag.id}">
                                     {tag.name}
                                 </label>
@@ -129,6 +153,21 @@
                     {/each}
                     <nav>
                         <ul class="pagination">
+                            {#if response.previous}
+                                <li class="page-item">
+                                    <button class="page-link" onclick={() => update_post(previous_offset)}>Previous</button>
+                                </li>
+                            {/if}
+                            {#each Array(Math.ceil(response.count / response.limit)).fill(0) as _, pageIndex}
+                                <li class="page-item {pageIndex * response.limit === response.offset ? 'active' : ''}">
+                                    <button class="page-link" onclick={() => update_post(pageIndex * response.limit)}>{pageIndex + 1}</button>
+                                </li>
+                            {/each}
+                            {#if response.next}
+                                <li class="page-item">
+                                    <button class="page-link" onclick={() => update_post(next_offset)}>Next</button>
+                                </li>
+                            {/if}
                         </ul>
                     </nav>
                 {:else}
