@@ -1,4 +1,4 @@
-import { apiRequest } from '$lib/api';
+import { api_request } from '$lib/api';
 
 export async function getScholarships({
     search = '', status = '', source = '', destination = '',
@@ -18,7 +18,7 @@ export async function getScholarships({
     const queryString = new URLSearchParams(params as Record<string, string>).toString();
     const endpoint = `scholarship/?${queryString}`;
 
-    const response = await apiRequest(endpoint, 'GET');
+    const response = await api_request(endpoint, 'GET');
     const scholarships = response.results;
 
     return {

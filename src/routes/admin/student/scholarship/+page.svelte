@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { apiRequest } from "$lib/api";
+  import { api_request } from "$lib/api";
   import { onMount } from "svelte";
 
   let data: Array<any> = [];
@@ -10,7 +10,7 @@
   // Fungsi untuk mengambil data
   const fetchData = async (url = "scholarship/") => {
     try {
-      const result = await apiRequest(url);
+      const result = await api_request(url);
       data = result.results;
       totalCount = result.count;
       next = result.next;

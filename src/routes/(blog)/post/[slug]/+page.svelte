@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { getPost } from '$lib/objects/blog_post';
+    import { get_post } from '$lib/objects/blog_post';
     import { page } from '$app/state';
 
     let slug = page.params.slug;
@@ -18,7 +18,7 @@
     });
  
     onMount(async () => {
-        post = await getPost({slug: slug})
+        post = await get_post({slug: slug})
     });
 </script>
 

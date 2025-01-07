@@ -1,13 +1,13 @@
 <script>
     import { onMount } from 'svelte';
-    import { apiFetch } from '../../lib/api';
+    import { api_fetch } from '../../lib/api';
 
     let users = [];
     let errorMessage = '';
 
     const fetchUsers = async () => {
         try {
-            users = await apiFetch('users/'); // Panggil endpoint API
+            users = await api_fetch('users/'); // Panggil endpoint API
         } catch (error) {
             errorMessage = error.message;
         }

@@ -1,6 +1,6 @@
 <script lang='ts'>
     import { onMount } from 'svelte';
-    import { getPosts } from '$lib/objects/blog_post';
+    import { get_posts } from '$lib/objects/blog_post';
 
     import Carousel from '$lib/components/blog/Carousel.svelte';
     import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
@@ -12,7 +12,7 @@
     let posts:Post[] = $state([]);
 
     onMount(async () => {
-        const response = await getPosts({page: 1, limit: 6});
+        const response = await get_posts({page: 1, limit: 6});
         posts = response.results || [];
     })
 

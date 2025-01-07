@@ -1,68 +1,75 @@
-import { apiRequest } from '$lib/api';
+import { api_request } from '$lib/api';
 import { DateTime } from 'luxon';
 import { htmlToText } from 'html-to-text';
 
 
-export async function getPosts({ search = '', category = '', tag = '', slug = '', id = '', limit = 10, page = 1 } = {}) {
+export async function get_posts({ search = '', categories = [], tags = [], slug = '', id = '', limit = 10, offset = 0 } = {}) {
     const params: { 
         search?     : string;
-        category?   : string;
-        tag?        : string,
-        slug?       : string,
-        id?         : string
+        categories? : string[];
+        tags?       : string[];
+        slug?       : string;
+        id?         : string;
         limit?      : number;
-        page?       : number;
+        offset?     : number;
     } = {};
     
     if (search) params.search = search;
-    if (category) params.category = category;
-    if (tag) params.tag = tag;
+    if (categories.length) params.categories = categories;
+    if (tags.length) params.tags = tags;
     if (slug) params.slug = slug;
     if (id) params.id = id; 
     if (limit) params.limit = limit;
-    if (page) params.page = page;
+    if (offset) params.offset = offset;
 
     // Menyusun endpoint dengan query string
-    const queryString = new URLSearchParams(params as Record<string, string>).toString();
-    const endpoint = `posts/?${queryString}`;
+    const query_string = new URLSearchParams(Object.entries(params).reduce((acc, [key, value]) => {
+        if (Array.isArray(value)) {
+            value.forEach(val => acc.append(key, val));
+        } else {
+            acc.append(key, String(value));
+        }
+        return acc;
+    }, new URLSearchParams())).toString();
+    const endpoint = `posts/?${query_string}`;
 
-    const response = await apiRequest(endpoint, 'GET');
+    const response = await api_request(endpoint, 'GET');
     const posts = response.results;
 
     return {
         count: response.count, 
+        previous: response?.previous || "",
+        next: response?.next || "",
         results: posts.map((post: { content: string; publication_date: string }) => ({
             ...post,
-            post_excerpt: createExcerpt(post.content),
-            publication_date: formatPublicationDate(post.publication_date),
+            post_excerpt: create_excerpt(post.content),
+            publication_date: format_publication_date(post.publication_date),
         })),
-        page_size: limit,
+        limit: limit,
+        offset: offset
     };
 }
 
 
-export async function getPost({ slug = '', id = '' } = {}) {
+export async function get_post({ slug = '', id = '' } = {}) {
     if (!slug && !id) {
         throw new Error('Either slug or id must be provided to get a post.');
     }
 
-    // Memanggil fungsi getPosts dengan filter slug atau id
-    const posts = await getPosts({ slug, id });
+    // Memanggil fungsi get_posts dengan filter slug atau id
+    const posts = await get_posts({ slug, id });
 
     // Mengembalikan post pertama jika ditemukan, atau null jika tidak ada
     return posts.results.length > 0 ? posts.results[0] : null;
 }
 
 
-
-function createExcerpt(content: string) {
+function create_excerpt(content: string) {
     const text = htmlToText(content);
     return text.length > 205 ? text.substring(0, 205) + '...' : text;
 }
 
 
-function formatPublicationDate(date:string) {
+function format_publication_date(date:string) {
     return DateTime.fromISO(date).toFormat('yyyy-MM-dd');
 }
-
-

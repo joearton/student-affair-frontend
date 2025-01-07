@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { apiRequest } from "$lib/api";
+  import { api_request } from "$lib/api";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
 
@@ -14,7 +14,7 @@
   const fetchDetail = async (id: string) => {
     try {
       isLoading = true;
-      const result = await apiRequest(`scholarship_app/${id}/`);
+      const result = await api_request(`scholarship_app/${id}/`);
       data = result;
     } catch (err) {
       console.error("Error fetching detail:", err);

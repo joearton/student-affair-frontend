@@ -1,4 +1,4 @@
-import { apiRequest } from './api';
+import { api_request } from './api';
 
 
 export const login = async (username: string, password: string): Promise<{ errorMessage: string, successMessage: string }> => {
@@ -12,7 +12,7 @@ export const login = async (username: string, password: string): Promise<{ error
 
     try {
         // @ts-ignore
-        const response = await apiRequest('/token/', 'POST', { username, password });
+        const response = await api_request('/token/', 'POST', { username, password });
         const { access, refresh } = response;
 
         // Simpan token ke sessionStorage

@@ -6,5 +6,7 @@ export interface Post {
     featured_image: string;
     publication_date: string;
     post_excerpt: string;
+    categories: Category[];
+    tag: Tag[];
 }
   

@@ -20,7 +20,7 @@ if (typeof window !== 'undefined') {
 
 
 // Function untuk melakukan request dengan menggunakan Axios
-export const apiRequest = async (endpoint:string, method:string = 'GET') => {
+export const api_request = async (endpoint:string, method:string = 'GET') => {
     try {
         const response = await api({
             url: endpoint,
@@ -37,7 +37,7 @@ export const apiRequest = async (endpoint:string, method:string = 'GET') => {
 
 
 // API fallback menggunakan fetch jika diperlukan
-export const apiFetch = async (endpoint:string, options = {}) => {
+export const api_fetch = async (endpoint:string, options = {}) => {
     const token = localStorage.getItem('access_token');
     const headers = {
         'Content-Type': 'application/json',
