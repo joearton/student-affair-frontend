@@ -12,7 +12,7 @@
 </script>
 
 {#if isLoading}
-    <ShimmerLoader color=#f1f1f1 count=1 height=100></ShimmerLoader>
+    <ShimmerLoader count=3 height=100></ShimmerLoader>
 {:else}
     <div id="front-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -20,8 +20,8 @@
                 <div class="carousel-item {index === 0 ? 'active' : ''}">
                     <img src={preference.site + slideshow.image} class="d-block w-100" alt={slideshow.title}>
                     <div class="carousel-caption d-none d-md-block">
-                        <h1 class="display-6 opacity-75 m-0 bg-primary text-light p-3">{slideshow.title}</h1>
-                        <p class="opacity-75 lead bg-light m-0 text-dark p-3">{@html slideshow.description}</p>
+                        <h1 class="display-6 m-0 bg-primary text-light p-3">{slideshow.title}</h1>
+                        <p class="opacity-75 lead bg-white m-0 text-dark p-3">{@html slideshow.description}</p>
                     </div>
                 </div>
             {/each}

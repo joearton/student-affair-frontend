@@ -1,29 +1,33 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { get_post } from '$lib/objects/blog_post';
+    import { get_posts, get_post } from '$lib/objects/blog_post';
     import { page } from '$app/state';
+    import type { LayoutData } from './$types';
+    import type { Post as BlogPost } from '$lib/objects/blog_post';
+
+    let { data }: { data: LayoutData } = $props();
 
     let slug = page.params.slug;
-    let post = $state({
-        featured_image: '',
-        title: '',
-        subtitle: '',
-        post_excerpt: '',
-        author: {
-            profile_picture_url: '',
-            username: ''
-        },
-        publication_date: '',
-        content: ''
+    let post: BlogPost = $state({} as BlogPost);
+    
+    let related_posts = $state({
+        results: [] as BlogPost[],
+        previous: '',
+        next: '',
+        count: 0,
+        offset: 0,
+        limit: 3,
     });
  
     onMount(async () => {
         post = await get_post({slug: slug})
+        related_posts = await get_posts({categories: post.categories.map((category: { id: string }) => category.id).join(','), limit: 4})
     });
+
 </script>
 
 
-<div class="mb-3 post-thumbnail" style="background: url({post.featured_image}) bottom center no-repeat; background-size: cover;">
+<div class="mb-3 post-thumbnail" style="background: url({post.featured_image}) center center no-repeat; background-size: cover;">
     <div class="overlay"></div>
     <div class="container px-3">
         <div class="position-absolute post-thumbnail-label">
@@ -36,25 +40,62 @@
 </div>
 
 
-<div class="container">
-    <div class="row">
+<div class="container bg-white my-3 py3 px-4">
+    <article class="row border-bottom py-5 mb-3">
         <div class="col-md-3">
-            <div class="border shadow-sm">
+            <div>
                 <div class="text-center">
                     <h5 class='text-center mb-3 p-3 border-bottom'>Tentang Penulis</h5>
-                    <img src={post.author?.profile_picture_url || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ68D1zB62HiAWZAkQpessCgGpmfvJQUX8Rhg&s'} alt={post.author?.username} class="rounded-circle" width="100" height="100" />
-                    <h5>{post.author?.username}</h5>
+                    <img src="{data.preference.site_protocol}://{post.author?.user_picture}" alt={post.author?.username} class="rounded-circle" width="100" height="100" />
+                    <h5>{post.author?.fullname}</h5>
                 </div>
                 <div class="p-3">
-                    <div class="fa fa-calendar-alt"></div> {post.publication_date}
+                    <div><span class="fa fa-calendar-alt"></span> {post.publication_date}</div>
+                    <div class="fw-bold">{post.title}</div>
+                </div>
+                <div class="p-3">
+                    <h6><i class="fa fa-list-alt"></i> Kategori</h6>
+                    <div class="my-1">
+                        {#each post.categories as category}
+                            <div>{category.name}</div>
+                        {/each}
+                    </div>
+                </div>
+                <div class="p-3">
+                    <h6><i class="fa fa-tag"></i> Tag</h6>
+                    <div class="my-1">
+                        {#each post.tags as tag}
+                            <span class="badge bg-info">{tag.name}</span>
+                        {/each}
+                        </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-9">            
-            <article>{@html post.content}</article>
+        <div class="col-md-9 border-start">            
+            <div class="post-content">{@html post.content}</div>
+        </div>
+    </article>
+
+    <div class="related-posts py-5">
+        <div class="row">
+            {#each related_posts.results as related_post}
+                {#if related_post.id !== post.id}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <img src="{related_post.featured_image}" class="card-img-top" alt="{related_post.title}">
+                            <div class="card-body bg-white">
+                                <h5 class="card-title">{related_post.title}</h5>
+                                <p class="card-text">{related_post.post_excerpt}</p>
+                                <a href="/post/{related_post.slug}" class="btn btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+            {/each}
         </div>
     </div>
+
 </div>
   
 
@@ -71,7 +112,8 @@
 
     .post-thumbnail {
         position: relative;
-        height: 75vh;
+        height: 85vh;
+        clip-path: url(#path-15);
     }
 
     .post-thumbnail-label {
@@ -82,4 +124,23 @@
     .post-title, .post-subtitle {
         opacity: 0.95;
     }
+
+    .post-content {
+        font-size: 17px;
+    }
+
+    .related-posts .card {
+        border: none;
+        transition: transform 0.2s;
+    }
+
+    .related-posts .card:hover {
+        transform: scale(1.05);
+    }
+
+    .related-posts .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
 </style>

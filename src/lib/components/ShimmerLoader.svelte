@@ -1,13 +1,12 @@
 <script lang="ts">
-    let {color, height, count} = $props();
+    let { height, count } = $props();
 </script>
 
 <div class="shimmer-wrapper">
-    {#each Array(count) as _, i}
-        <div class="shimmer" style="--color: {color}; --height: {height};"></div>
+    {#each Array.from({ length: count }, (_, i) => i) as i}
+        <div class="shimmer" style="height: {height}px;"></div>
     {/each}
 </div>
-
 
 <style>
     .shimmer-wrapper {
@@ -18,16 +17,15 @@
 
     .shimmer {
         width: 100%;
-        height: var(--height);
         background: linear-gradient(
             to right,
-            var(--color) 0%,
+            #f6f7f8 0%,
             #e0e0e0 20%,
-            var(--color) 40%,
-            var(--color) 100%
+            #f6f7f8 40%,
+            #f6f7f8 100%
         );
         background-size: 200% 100%;
-        animation: shimmer 1.5s infinite;
+        animation: shimmer 2.5s infinite;
     }
 
     @keyframes shimmer {

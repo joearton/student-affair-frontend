@@ -12,7 +12,7 @@
     let posts:Post[] = $state([]);
 
     onMount(async () => {
-        const response = await get_posts({page: 1, limit: 6});
+        const response = await get_posts({limit: 6});
         posts = response.results || [];
     })
 
@@ -24,7 +24,7 @@
     <Carousel preference = {data.preference}></Carousel>
 
     <!-- Mahasiswa Baru -->
-    <div class="new-student-section py-5 position-relative">
+    <div class="new-student-section py-5 position-relative bg-light">
         <div class="container text-center py-5">
             <h2 class="display-5 text-primary mb-1 fw-bold">Pendaftaran Mahasiswa Baru</h2>
             <p class="lead mb-4">Bergabunglah bersama kami untuk masa depan lebih cerah.</p>
@@ -41,7 +41,7 @@
             <p class="mb-5 text-white">Kami memberikan yang terbaik untuk memastikan kesuksesan Anda.</p>
             <div class="row gy-4">
                 <div class="col-md-3">
-                    <div class="feature-card py-4 px-3 bg-white shadow rounded">
+                    <div class="feature-card py-4 px-3 bg-white rounded">
                         <div class="icon-container mb-3">
                             <i class='fa fa-university'></i>
                         </div>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="feature-card py-4 px-3 bg-white shadow rounded">
+                    <div class="feature-card py-4 px-3 bg-white rounded">
                         <div class="icon-container mb-3">
                             <i class="fa fa-user-graduate"></i>
                         </div>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="feature-card py-4 px-3 bg-white shadow rounded">
+                    <div class="feature-card py-4 px-3 bg-white rounded">
                         <div class="icon-container mb-3">
                             <i class="fa fa-users"></i>
                         </div>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="feature-card py-4 px-3 bg-white shadow rounded">
+                    <div class="feature-card py-4 px-3 bg-white rounded">
                         <div class="icon-container mb-3">
                             <i class="fa fa-trophy"></i>
                         </div>
@@ -85,14 +85,14 @@
             {#if posts.length === 0}
                 <NoDataAvailable></NoDataAvailable>
             {:else}
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-md-3 g-5">
                     {#each posts as post}
-                        <div class="col">
-                            <div class="card post-item h-100 shadow-lg">
+                        <div class="col mb-3">
+                            <div class="card post-item h-100 shadow-sm border-0">
                                 <a class="card-title mb-1" href={`/post/${post.slug}`} aria-label="{post.title}">
                                     <div class="post-thumbnail" style="background: url({post.featured_image}) center center no-repeat; background-size: cover;"></div>
                                 </a>
-                                <div class="card-body px-4">
+                                <div class="card-body bg-white px-4">
                                     <div class='py-2 text-sm'>
                                         <i class='fa fa-calendar-alt'></i> {post.publication_date}
                                     </div>

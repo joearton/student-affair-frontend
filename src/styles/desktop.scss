@@ -2,7 +2,7 @@
 
 // scss-docs-start gray-color-variables
 $white:                      #fff !default;
-$gray-100:                   #f0f0f0 !default;
+$gray-100:                   #f7f7f7 !default;
 $gray-200:                   #e9ecef !default;
 $gray-300:                   #dee2e6 !default;
 $gray-400:                   #ced4da !default;
@@ -19,6 +19,7 @@ $primary:                 #002e5c;
 $warning:                 #ffcc00;
 
 $font-family-sans-serif:  'Ubuntu', sans-serif;
+$body-bg:                 $gray-100;
 
 // navbar 
 $navbar-dark-color:                 $gray-300;

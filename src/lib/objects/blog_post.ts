@@ -2,15 +2,14 @@ import { api_request } from '$lib/api';
 import { DateTime } from 'luxon';
 import { htmlToText } from 'html-to-text';
 
-
-export async function get_posts({ search = '', categories = '', tags = '', slug = '', id = '', offset = "0", limit = 10} = {}) {
+export async function get_posts({ search = '', categories = '', tags = '', slug = '', id = '', offset = 0, limit = 10} = {}) {
     const params: { 
         search?     : string;
         categories? : string;
         tags?       : string;
         slug?       : string;
         id?         : string;
-        offset?     : string;
+        offset?     : number;
         limit?      : number;
     } = {};
     
