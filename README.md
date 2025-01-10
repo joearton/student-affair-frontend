@@ -1,38 +1,47 @@
-# sv
+# Student Affair Frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This project is the frontend for the Student Affair application, built with Svelte.
 
-## Creating a project
+## Creating a Project
 
-If you're seeing this, you've probably already done this step. Congrats!
+Follow these steps to create a new project:
 
-```bash
-# create a new project in the current directory
-npx sv create
+1. Create a new project in the current directory:
+    ```bash
+    npx sv create
+    ```
 
-# create a new project in my-app
-npx sv create my-app
-```
+2. Create a new project in a directory named `my-app`:
+    ```bash
+    npx sv create my-app
+    ```
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+After creating a project and installing dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-```bash
-npm run dev
+1. Start the development server:
+    ```bash
+    npm run dev
+    ```
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+2. Start the server and open the app in a new browser tab:
+    ```bash
+    npm run dev -- --open
+    ```
 
 ## Building
 
-To create a production version of your app:
+To create a production version of your app, run:
 
 ```bash
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+You can preview the production build with:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+npm run preview
+```
+
+> **Note:** To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
