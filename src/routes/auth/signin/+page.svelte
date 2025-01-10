@@ -3,15 +3,14 @@
     import type { LayoutData } from '../$types';
 
     let { data }: { data: LayoutData } = $props();
-    let preference = data.preference;
-    const site_title = preference.site_title;
     
     let username = $state('');
     let password = $state('');
     let errorMessage = $state('');
     let successMessage = $state('');
 
-    const handleLogin = async () => {
+    const handleLogin = async (event: Event) => {
+        event.preventDefault();
         const { errorMessage: err, successMessage: succ } = await login(username, password);
         
         errorMessage = err;
@@ -19,15 +18,9 @@
     };
 </script>
 
-
-<svelte:head>
-    <title>Login | {site_title}</title>
-</svelte:head>
-
-
-<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row w-100">
-        <div class="login-container bg-white shadow-lg border rounded px-4 py-5">
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg border-0 rounded-3 p-4" style="max-width: 400px; width: 100%;">
+        <div class="card-body">
             <h2 class="text-center mb-4 text-primary">Sign In</h2>
 
             {#if successMessage}
@@ -42,39 +35,77 @@
                 </div>
             {/if}
 
-            <form onsubmit={handleLogin}>
-                <div class="form-input mb-4">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" id="username" class="form-control form-control-lg" bind:value={username} placeholder="Masukkan username" required />
-                </div>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="student-tab" data-bs-toggle="tab" data-bs-target="#student" type="button" role="tab" aria-controls="student" aria-selected="true">Student</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="false">General</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="student" role="tabpanel" aria-labelledby="student-tab">
+                    <form onsubmit={handleLogin}>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username (NIM)</label>
+                            <input type="text" id="username" class="form-control" bind:value={username} placeholder="Enter NIM" required />
+                            <div class="form-text">Gunakan 4 digit nomor handphone dan nomor hp di Siakad</div>
+                        </div>
 
-                <div class="form-input mb-4">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" class="form-control form-control-lg" bind:value={password} placeholder="Masukkan password" required />
-                </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" bind:value={password} placeholder="Enter password" required />
+                        </div>
 
-                <div class="d-grid gap-2 mb-4">
-                    <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+                <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="general-tab">
+                    <form onsubmit={handleLogin}>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" id="username" class="form-control" bind:value={username} placeholder="Enter username" required />
+                        </div>
 
-            <div class="text-center">
-                <a href="/register" class="text-decoration-none text-primary">Belum punya akun? Daftar</a>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" bind:value={password} placeholder="Enter password" required />
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
 <style>
-    .login-container {
-        max-width: 400px;
-        margin: 0 auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 12px;
+    .card {
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
-    
+
     h2 {
         font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 10px;
+    }
+
+    .btn-primary {
+        background: #007bff;
+        border: none;
+        border-radius: 10px;
+    }
+
+    .btn-primary:hover {
+        background: #0056b3;
     }
 </style>

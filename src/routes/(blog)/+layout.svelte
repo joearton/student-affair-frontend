@@ -11,11 +11,6 @@
 </script>
 
 
-<svelte:head>
-    <title>Welcome | {data.preference.site_title}</title>
-</svelte:head>
-
-
 <div class="topbar bg-primary py-2">
     <ClipPath></ClipPath>
     <Topbar preference = {data.preference}></Topbar>
