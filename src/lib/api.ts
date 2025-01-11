@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { refresh_token } from './auth';
+import { redirect } from '@sveltejs/kit';
 
 
 const baseURL = import.meta.env.VITE_BASE_URL;
@@ -10,7 +12,7 @@ const api = axios.create({
 // Menambahkan token ke header jika ada, aktifkan jika hanya client side
 if (typeof window !== 'undefined') {
     api.interceptors.request.use((config) => {
-        const token = localStorage.getItem('access_token'); // Ambil token dari localStorage
+        const token = sessionStorage.getItem('access_token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -19,41 +21,44 @@ if (typeof window !== 'undefined') {
 }
 
 
-// Function untuk melakukan request dengan menggunakan Axios
-export const api_request = async (endpoint:string, method:string = 'GET') => {
+export const api_request = async (endpoint: string, method: string = 'GET', data: any = null) => {
     try {
         const response = await api({
             url: endpoint,
             method: method,
             headers: {
-                'Content-Type': 'application/json', 
+                'Content-Type': 'application/json',
             },
+            data: data,
         });
         return response.data;
     } catch (err) {
-        console.error(`Unable to request ${endpoint}`);
+        if (axios.isAxiosError(err)) {
+            if (err.response?.status === 401) {
+                console.error('Unauthorized request. Attempting to refresh token.');
+                const tokenRefreshed = await refresh_token();
+                if (tokenRefreshed) {
+                    // Retry the original request
+                    const retryResponse = await api({
+                        url: endpoint,
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        data: data,
+                    });
+                    return retryResponse.data;
+                } else {
+                    console.error('Token refresh failed. Please log in again.');
+                    redirect(307, '/auth/signin');
+                }
+            } else {
+                console.error(`Request failed with status code ${err.response?.status}`);
+            }
+        } else {
+            console.error('An unexpected error occurred');
+        }
     }
-};
-
-
-// API fallback menggunakan fetch jika diperlukan
-export const api_fetch = async (endpoint:string, options = {}) => {
-    const token = localStorage.getItem('access_token');
-    const headers = {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-    };
-
-    const response = await fetch(`${baseURL}/${endpoint}`, {
-        ...options,
-        headers,
-    });
-
-    if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-    }
-
-    return response.json();
 };
 
 

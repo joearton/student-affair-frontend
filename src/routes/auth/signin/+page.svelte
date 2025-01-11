@@ -1,5 +1,6 @@
 <script lang="ts">
     import { login } from '$lib/auth';  
+    import { goto } from '$app/navigation';
     import type { LayoutData } from '../$types';
 
     let { data }: { data: LayoutData } = $props();
@@ -8,104 +9,84 @@
     let password = $state('');
     let errorMessage = $state('');
     let successMessage = $state('');
+    let loading = $state(false);
 
     const handleLogin = async (event: Event) => {
         event.preventDefault();
+
+        loading = true;
+
         const { errorMessage: err, successMessage: succ } = await login(username, password);
         
         errorMessage = err;
         successMessage = succ;
+
+        if (succ) {
+            goto('/auth/validate');
+        }
     };
+
 </script>
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow-lg border-0 rounded-3 p-4" style="max-width: 400px; width: 100%;">
-        <div class="card-body">
-            <h2 class="text-center mb-4 text-primary">Sign In</h2>
-
-            {#if successMessage}
-                <div class="alert alert-success" role="alert">
-                    {successMessage}
+    <div class="card bg-white border-0 shadow-lg" style="max-width: 950px; width: 100%;">
+        <div class="row g-0">
+            <!-- Left Section with Illustration -->
+            <div class="col-md-7 d-flex flex-column justify-content-center bg-info text-white px-4">
+                <h1 class="h3 mb-1">{ data.preference.site_title }</h1>
+                <p class="lead">Please sign in to continue.</p>
+                <div class="mt-3">
+                    <a href="/" class="btn btn-light">Back to Home</a>
                 </div>
-            {/if}
+            </div>
 
-            {#if errorMessage}
-                <div class="alert alert-danger" role="alert">
-                    {errorMessage}
-                </div>
-            {/if}
-
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="student-tab" data-bs-toggle="tab" data-bs-target="#student" type="button" role="tab" aria-controls="student" aria-selected="true">Student</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="false">General</button>
-                </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="student" role="tabpanel" aria-labelledby="student-tab">
-                    <form onsubmit={handleLogin}>
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username (NIM)</label>
-                            <input type="text" id="username" class="form-control" bind:value={username} placeholder="Enter NIM" required />
-                            <div class="form-text">Gunakan 4 digit nomor handphone dan nomor hp di Siakad</div>
+            <!-- Right Section with Form -->
+            <div class="col-md-5">
+                <div class="card-body px-4 py-5">
+                    <h2 class="text-center mb-4">Sign In</h2>
+                    
+                    {#if successMessage}
+                        <div class="alert alert-success" role="alert">
+                            {successMessage}
                         </div>
+                    {/if}
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" id="password" class="form-control" bind:value={password} placeholder="Enter password" required />
+                    {#if errorMessage}
+                        <div class="alert alert-danger" role="alert">
+                            {errorMessage}
                         </div>
+                    {/if}
 
-                        <div class="d-grid mb-3">
-                            <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="general-tab">
                     <form onsubmit={handleLogin}>
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" id="username" class="form-control" bind:value={username} placeholder="Enter username" required />
+                            <input type="text" id="username" class="form-control" bind:value={username} placeholder="Enter your name" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" id="password" class="form-control" bind:value={password} placeholder="Enter password" required />
+                            <input type="password" id="password" class="form-control" bind:value={password} placeholder="Enter your password" required>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input type="checkbox" id="rememberMe" class="form-check-input">
+                            <label for="rememberMe" class="form-check-label">Remember me</label>
                         </div>
 
                         <div class="d-grid mb-3">
-                            <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                            <button type="submit" class="btn btn-info" disabled={loading}>
+                                {#if loading}
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Loading...
+                                {:else}
+                                    Sign In
+                                {/if}
+                            </button>
                         </div>
+
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .card {
-        background: #ffffff;
-        border-radius: 15px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-        font-weight: bold;
-    }
-
-    .form-control {
-        border-radius: 10px;
-    }
-
-    .btn-primary {
-        background: #007bff;
-        border: none;
-        border-radius: 10px;
-    }
-
-    .btn-primary:hover {
-        background: #0056b3;
-    }
-</style>

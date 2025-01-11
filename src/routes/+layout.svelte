@@ -5,6 +5,7 @@
     import type { Snippet } from 'svelte';    
 
     import { page } from '$app/state';
+    import Message from '$lib/components/Message.svelte';
 
     let { data, children }: { data: LayoutData, children: Snippet } = $props();
     let section_title = data.preference.page_setting?.page_title || page.data.title || "";
@@ -21,4 +22,7 @@
 
 
 {@render children()}
+
+<Message></Message>
+
 

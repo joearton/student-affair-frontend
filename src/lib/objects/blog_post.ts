@@ -26,10 +26,10 @@ export async function get_posts({ search = '', categories = '', tags = '', slug 
     const endpoint = `posts/?${query_string}`;
 
     const response = await api_request(endpoint, 'GET');
-    const posts = response.results;
+    const posts = response?.results || [];
 
     return {
-        count: response.count, 
+        count: response?.count || 0, 
         previous: response?.previous || "",
         next: response?.next || "",
         results: posts.map((post: { content: string; publication_date: string }) => ({

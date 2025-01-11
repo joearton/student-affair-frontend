@@ -19,7 +19,7 @@
 
 
 <div class="container">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row">
         {#each scholarships as scholarship}
             <div class="col">
                 <div class="card">
@@ -62,43 +62,16 @@
 </div>
 
     
-<div class="scholarship-container">
+<div class="container">
     <div class="scholarship-header">
-        <h2 class="title">Daftar Beasiswa Tersedia</h2>
-        <span class="fe-separator"></span>
+        <h3 class="title">Daftar Beasiswa</h3>
     </div>
 
-    <!-- Search Section -->
     <div class="search-container">
         <div class="col col-12 px-0">
-            <div class="d-flex mb-3 fe-shadow">
-                <input 
-                    type="text" 
-                    placeholder="Keyword beasiswa" 
-                    class="bg-white py-2 px-3 border-light-gray w-100 fs-subtitle-2 fw-600"
-                    bind:value={searchKeyword}>
+            <div class="d-flex mb-3">
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    .search-container {
-        display: flex; 
-        flex-wrap: wrap; 
-        justify-content: center; 
-        padding: 20px;
-        width: 100%;
-        gap: 20px;
-        align-items: center;
-    }
-
-
-    .card-image {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-        background-color: transparent;
-    }
-    
-</style>

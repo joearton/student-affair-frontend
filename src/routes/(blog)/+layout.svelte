@@ -4,8 +4,9 @@
     
     import Topbar from '$lib/components/blog/Topbar.svelte';
     import Navbar from '$lib/components/blog/Navbar.svelte';
+    import Carousel from '$lib/components/blog/Carousel.svelte';
     import Footer from '$lib/components/blog/Footer.svelte';
-    import ClipPath from '$lib/components/ClipPath.svelte'
+    import ClipPath from '$lib/components/ClipPath.svelte';
 
     let { data, children }: { data: LayoutData, children: Snippet } = $props();
 </script>
@@ -21,6 +22,7 @@
 </nav>
 
 <main>
+    <Carousel preference = {data.preference}></Carousel>
     {@render children() }
 </main>
 
