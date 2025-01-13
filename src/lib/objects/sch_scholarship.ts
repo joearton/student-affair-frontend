@@ -3,16 +3,18 @@ import { create_excerpt, format_publication_date } from '$lib/utils';
 
 
 export async function get_scholarships({search = '', status = '', source = '', destination = '',
-    units = '', targets = '', limit = 10, offset = 0, id = ''} = {}) {
+    level = '', targets = '', limit = 10, offset = 0, faculties = '', departments = '', id = ''} = {}) {
     const params: { 
         search? : string;
         status? : string;
         source? : string;
         destination? : string;
-        units?  : string;
+        level?  : string;
         targets?: string;
         limit?  : number;
         offset? : number;
+        faculties? : string;
+        departments? : string;
         id?     : string;
     } = {};
 
@@ -20,10 +22,12 @@ export async function get_scholarships({search = '', status = '', source = '', d
     if (status) params.status = status;
     if (source) params.source = source;
     if (destination) params.destination = destination;
-    if (units.length) params.units = units;
+    if (level.length) params.level = level;
     if (targets.length) params.targets = targets;
     if (limit) params.limit = limit;
     if (offset) params.offset = offset;
+    if (faculties) params.id = faculties;
+    if (departments) params.id = departments;
     if (id) params.id = id;
 
     const queryString = new URLSearchParams(params as Record<string, string>).toString();
@@ -37,6 +41,7 @@ export async function get_scholarships({search = '', status = '', source = '', d
         next: response?.next || "",
         count: response?.count || 0, 
         limit: limit,
+        offset: offset,
         results: scholarships.map((scholarship: { description: string; start_date: string, end_date: string}) => ({
             ...scholarship,
             sch_excerpt: create_excerpt(scholarship.description, 225),

@@ -3,14 +3,12 @@
     import { get_scholarships } from '$lib/objects/sch_scholarship';
     import type { Scholarship } from '$lib/types/scholarship';
     import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
+    import { api_request } from '$lib/api';
+    import type { Department, Faculty } from '$lib/types/scholarship_university';
+    import ShimmerLoader from '$lib/components/ShimmerLoader.svelte';
 
-    let response = $state({
-        results: [],
-        previous: '',
-        next: '',
-        count: 0,
-        limit: 10,
-    });
+    let response_all = $state({results: [], previous: '', next: '', count: 0, limit: 10, offset: 0});
+    let response_ongoing = $state({results: [], previous: '', next: '', count: 0, limit: 10, offset: 0});
     
     let filter_query = $state('');
     let filter_target = $state('');
@@ -18,37 +16,69 @@
     let filter_status = $state('');
     let filter_level = $state('');
     let filter_source = $state('');
+    let filter_faculty = $state('');
+    let filter_department = $state('');
     let is_loading = $state(false);
 
     let scholarships: Scholarship[] = $state([]);
     let ongoing_scholarship: Scholarship[] = $state([]);
+    let faculties:Faculty[] = $state([]);
+    let departments:Department[] = $state([]);
+
+
+    // pagination variable
+    let previous_offset: number = 0;
+    let next_offset: number = 0;
+
+
+    function update_offsets() {
+        if (response_all.previous) {
+            previous_offset = Number(new URL(response_all.previous).searchParams.get('offset')) || 0;
+        }
+
+        if (response_all.next) {
+            next_offset = Number(new URL(response_all.next).searchParams.get('offset')) || 0;
+        }
+    }
+
 
     async function update_scholarship(offset: number = 0) {
         try {
             is_loading = true;
-            response = await get_scholarships({
+            response_all = await get_scholarships({
                 search: filter_query,
-                offset: offset,
                 status: filter_status,
                 source: filter_source,
                 destination: filter_destination,
                 targets: filter_target,
-                units: filter_level,
+                faculties: filter_faculty,
+                departments: filter_department,
+                level: filter_level,
                 limit: 10,
+                offset: offset,
             })
-            scholarships = response.results;
+            scholarships = response_all.results;
         } catch (error) {
-            console.error('Error fetching posts:', error);
+            console.error('Error fetching scholarship:', error);
         } finally {
+            update_offsets();
             is_loading = false;
         }
     }
 
     onMount(async () => {
-        response = await get_scholarships({limit: 3, status: 'on-going'})
-        ongoing_scholarship = response.results;
+        // on going scholarship
+        response_ongoing = await get_scholarships({limit: 6, status: 'on-going'})
+        ongoing_scholarship = response_ongoing.results;
+
+        // faculties and departments
+        faculties = await api_request('faculty', 'GET');
+        departments = await api_request('department', 'GET');
+
+        // all scholarships
         await update_scholarship();
-    });
+
+});
 </script>
 
 
@@ -65,19 +95,19 @@
                             <p class="small">{scholarship.sch_excerpt}</p>
                             <div class="row">
                                 <div class="col-md-4"><strong>Source</strong></div>
-                                <div class="col-md-8">: {scholarship.source_display}</div>
+                                <div class="col-md-8">{scholarship.source_display}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4"><strong>Destination</strong></div>
-                                <div class="col-md-8">: {scholarship.destination_display}</div>
+                                <div class="col-md-8">{scholarship.destination_display}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4"><strong>Target</strong></div>
-                                <div class="col-md-8">: {scholarship.target_names.map(target => target[0]).join(', ')}</div>
+                                <div class="col-md-8">{scholarship.target_names.map(target => target[0]).join(', ')}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4"><strong>Quota</strong></div>
-                                <div class="col-md-8">: {scholarship.quota}</div>
+                                <div class="col-md-8">{scholarship.quota}</div>
                             </div>
                             <div class="mt-3">
                                 <div class="bg-success text-white border-0 p-3 text-center">
@@ -110,7 +140,7 @@
     
         <div class="search-container my-3">
             <!-- Search bar -->
-            <div class="my-4">
+            <div class="my-3">
                 <div class="input-group">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter keyword" bind:value={filter_query} onchange="{() => update_scholarship()}">
                     <button class="btn btn-primary" type="button" onclick={() => update_scholarship()} aria-label="Search">
@@ -122,7 +152,6 @@
             <!-- Filter Section -->
             <div class="filter-section">
                 <div class="row py-3">
-                    <!-- Status -->
                     <div class="col-md-3">
                         <h6>Status</h6>
                         <div class="form-check">
@@ -136,12 +165,8 @@
                         <div class="form-check">
                             <input class="form-check-input" value="closed" type="checkbox" id="status3" bind:group={filter_status} onchange={() => update_scholarship()}>
                             <label class="form-check-label" for="status3">Closed</label>
-                        </div>
-                    </div>
-
-                    <!-- Target -->
-                    <div class="col-md-3">
-                        <h6>Target</h6>
+                        </div>                        
+                        <h6 class="mt-4">Target</h6>
                         <div class="form-check">
                             <input class="form-check-input" value="new-student" type="checkbox" id="target1" bind:group={filter_target} onchange={() => update_scholarship()}>
                             <label class="form-check-label" for="target1">Mahasiswa Baru</label>
@@ -156,7 +181,6 @@
                         </div>
                     </div>
 
-                    <!-- Level -->
                     <div class="col-md-3">
                         <h6>Level</h6>
                         <div class="form-check">
@@ -177,7 +201,6 @@
                         </div>
                     </div>
 
-                    <!-- Source -->
                     <div class="col-md-3">
                         <h6>Source</h6>
                         <div class="form-check">
@@ -188,11 +211,8 @@
                             <input class="form-check-input" value="external" type="checkbox" id="source2" bind:group={filter_source} onchange={() => update_scholarship()}>
                             <label class="form-check-label" for="source2">Beasiswa Eksternal</label>
                         </div>
-                    </div>
-
-                    <!-- Destination -->
-                    <div class="col-md-3 mt-4">
-                        <h6>Destination</h6>
+                        
+                        <h6 class="mt-4">Destination</h6>
                         <div class="form-check">
                             <input class="form-check-input" value="internal" type="checkbox" id="destination1" bind:group={filter_destination} onchange={() => update_scholarship()}>
                             <label class="form-check-label" for="destination1">UMKO</label>
@@ -202,6 +222,24 @@
                             <label class="form-check-label" for="destination2">Perguruan Tinggi Lain</label>
                         </div>
                     </div>
+
+                    <div class="col-md-3">
+                        <h6>Faculty</h6>
+                        <select class="form-select" bind:value={filter_faculty} onchange={() => update_scholarship()}>
+                            <option value="">---Show All---</option>
+                            {#each faculties as faculty}
+                                <option value={faculty.id}>{faculty.name}</option>
+                            {/each}
+                        </select>
+
+                        <h6 class="mt-4">Department</h6>
+                        <select class="form-select" bind:value={filter_department} onchange={() => update_scholarship()}>
+                            <option value="">---Show All---</option>
+                            {#each departments as department}
+                                <option value={department.id}>{department.name}</option>
+                            {/each}
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>    
@@ -210,7 +248,11 @@
 
     <div class="mb-3">
         {#if scholarships.length === 0}
-            <NoDataAvailable></NoDataAvailable>
+            {#if is_loading}
+                <ShimmerLoader height="75" count=5></ShimmerLoader>
+            {:else}
+                <NoDataAvailable></NoDataAvailable>
+            {/if}
         {/if}
         {#each scholarships as scholarship}
             <a href="scholarship/{scholarship.id}" class="sch-item card bg-white border-0 shadow-sm my-5" style="border-radius: 0;">
@@ -266,6 +308,25 @@
                 </div>
             </a>
         {/each}
+        <nav>
+            <ul class="pagination">
+                {#if response_all.previous}
+                    <li class="page-item">
+                        <button class="page-link" onclick={() => update_scholarship(previous_offset)}>Previous</button>
+                    </li>
+                {/if}
+                {#each Array(Math.ceil(response_all.count / response_all.limit)).fill(0) as _, pageIndex}
+                    <li class="page-item {pageIndex * response_all.limit === response_all.offset ? 'active' : ''}">
+                        <button class="page-link" onclick={() => update_scholarship(pageIndex * response_all.limit)}>{pageIndex + 1}</button>
+                    </li>
+                {/each}
+                {#if response_all.next}
+                    <li class="page-item">
+                        <button class="page-link" onclick={() => update_scholarship(next_offset)}>Next</button>
+                    </li>
+                {/if}
+            </ul>
+        </nav>
     </div>
 </div>
 

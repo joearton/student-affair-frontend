@@ -28,6 +28,7 @@
     // pagination variable
     let previous_offset: number = 0;
     let next_offset: number = 0;
+    let pagination_limit: number = 1;
 
     function update_offsets() {
         if (response.previous) {
@@ -157,27 +158,25 @@
                             {/if}
                         </div>
                     {/each}
-                    {#if response.results.length > response.limit}
-                        <nav>
-                            <ul class="pagination">
-                                {#if response.previous}
-                                    <li class="page-item">
-                                        <button class="page-link" onclick={() => update_post(previous_offset)}>Previous</button>
-                                    </li>
-                                {/if}
-                                {#each Array(Math.ceil(response.count / response.limit)).fill(0) as _, pageIndex}
-                                    <li class="page-item {pageIndex * response.limit === response.offset ? 'active' : ''}">
-                                        <button class="page-link" onclick={() => update_post(pageIndex * response.limit)}>{pageIndex + 1}</button>
-                                    </li>
-                                {/each}
-                                {#if response.next}
-                                    <li class="page-item">
-                                        <button class="page-link" onclick={() => update_post(next_offset)}>Next</button>
-                                    </li>
-                                {/if}
-                            </ul>
-                        </nav>
-                    {/if}
+                    <nav>
+                        <ul class="pagination">
+                            {#if response.previous}
+                                <li class="page-item">
+                                    <button class="page-link" onclick={() => update_post(previous_offset)}>Previous</button>
+                                </li>
+                            {/if}
+                            {#each Array(Math.ceil(response.count / response.limit)).fill(0) as _, pageIndex}
+                                <li class="page-item {pageIndex * response.limit === response.offset ? 'active' : ''}">
+                                    <button class="page-link" onclick={() => update_post(pageIndex * response.limit)}>{pageIndex + 1}</button>
+                                </li>
+                            {/each}
+                            {#if response.next}
+                                <li class="page-item">
+                                    <button class="page-link" onclick={() => update_post(next_offset)}>Next</button>
+                                </li>
+                            {/if}
+                        </ul>
+                    </nav>
                 {:else}
                     {#if is_loading}
                         <ShimmerLoader height="75" count=5></ShimmerLoader>
