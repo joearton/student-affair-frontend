@@ -4,7 +4,7 @@
     import type { LayoutData } from './$types';
     import type { BlogPost } from '$lib/objects/blog_post';
 
-    let { data }: { data: LayoutData } = $props();
+    const { data }: { data: LayoutData } = $props();
     
     let related_posts = $state({
         results: [] as BlogPost[],

@@ -66,7 +66,9 @@
         tags = await get_tags();
         await update_post();
     });
+
 </script>
+
 
 <div class="post-section py-5">
     <div class="container">

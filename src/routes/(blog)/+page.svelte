@@ -7,7 +7,7 @@
     import type { LayoutData } from '../$types';
     import type { Post } from '$lib/types/blog_post';
 
-    let { data }: { data: LayoutData} = $props();
+    const { data }: { data: LayoutData} = $props();
     let posts:Post[] = $state([]);
 
     onMount(async () => {

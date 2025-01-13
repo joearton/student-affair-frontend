@@ -1,11 +1,12 @@
 <script lang='ts'>
     import { onMount } from 'svelte'; 
     import { get_scholarships } from '$lib/objects/sch_scholarship';
-    import type { Scholarship } from '$lib/types/scholarship';
-    import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
     import { api_request } from '$lib/api';
+    import type { Scholarship } from '$lib/types/scholarship';
     import type { Department, Faculty } from '$lib/types/scholarship_university';
     import ShimmerLoader from '$lib/components/ShimmerLoader.svelte';
+    import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
+    import { slugify } from '$lib/utils';
 
     let response_all = $state({results: [], previous: '', next: '', count: 0, limit: 10, offset: 0});
     let response_ongoing = $state({results: [], previous: '', next: '', count: 0, limit: 10, offset: 0});
@@ -86,7 +87,7 @@
 <div class="container mb-5">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5 my-3">
         {#each ongoing_scholarship as scholarship}
-            <a class="sch-ongoing-item" href={`/scholarship/${scholarship.id}`}>
+            <a class="sch-ongoing-item" href={`/scholarship/${slugify(scholarship.name)}---${scholarship.id}`}>
                 <div class="col">
                     <div class="card bg-white border-0 shadow-sm h-100">
                         <div style="background-image: url('{scholarship.thumbnail}'); background-size: cover; background-position: center; height: 275px;"></div>
@@ -225,7 +226,7 @@
 
                     <div class="col-md-3">
                         <h6>Faculty</h6>
-                        <select class="form-select" bind:value={filter_faculty} onchange={() => update_scholarship()}>
+                        <select class="form-select form-select-sm" bind:value={filter_faculty} onchange={() => update_scholarship()}>
                             <option value="">---Show All---</option>
                             {#each faculties as faculty}
                                 <option value={faculty.id}>{faculty.name}</option>
@@ -233,7 +234,7 @@
                         </select>
 
                         <h6 class="mt-4">Department</h6>
-                        <select class="form-select" bind:value={filter_department} onchange={() => update_scholarship()}>
+                        <select class="form-select form-select-sm" bind:value={filter_department} onchange={() => update_scholarship()}>
                             <option value="">---Show All---</option>
                             {#each departments as department}
                                 <option value={department.id}>{department.name}</option>
@@ -255,7 +256,7 @@
             {/if}
         {/if}
         {#each scholarships as scholarship}
-            <a href="scholarship/{scholarship.id}" class="sch-item card bg-white border-0 shadow-sm my-5" style="border-radius: 0;">
+            <a href="{`/scholarship/${slugify(scholarship.name)}---${scholarship.id}`}" class="sch-item card bg-white border-0 shadow-sm my-5" style="border-radius: 0;">
                 <div class="row g-0">
                     <div class="col-md-3">
                         <div class="h-100" style="background-image: url('{scholarship.thumbnail}'); background-size: cover;"></div>
