@@ -18,11 +18,10 @@
         <div id="front-carousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 {#each preference.page_setting.slideshows as slideshow, index}
-                    <div class="carousel-item {index === 0 ? 'active' : ''}">
-                        <img src={preference.site + slideshow.image} class="d-block w-100" alt={slideshow.title}>
+                    <div class="carousel-item {index === 0 ? 'active' : ''}" style="background-image: url({preference.site + slideshow.image}); background-size: cover; background-position: top center; height: {preference.page_setting.slideshow_height};">
                         <div class="carousel-caption d-none d-md-block text-start">
-                            <h1 class="slideshow-title display-6 bg-primary text-light p-3">{slideshow.title}</h1>
-                            <p class="slideshow-desc opacity-75 lead bg-white text-dark p-3">{@html slideshow.description}</p>
+                            <div><h1 class="slideshow-title display-6 bg-primary text-light p-3">{slideshow.title}</h1></div>
+                            <div><p class="slideshow-desc opacity-75 lead bg-white text-dark p-3">{@html slideshow.description}</p></div>
                         </div>
                     </div>
                 {/each}

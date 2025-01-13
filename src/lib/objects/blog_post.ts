@@ -1,6 +1,6 @@
 import { api_request } from '$lib/api';
-import { DateTime } from 'luxon';
-import { htmlToText } from 'html-to-text';
+import { create_excerpt, format_publication_date } from '$lib/utils';
+
 
 export async function get_posts({ search = '', categories = '', tags = '', slug = '', id = '', offset = 0, limit = 10} = {}) {
     const params: { 
@@ -55,13 +55,3 @@ export async function get_post({ slug = '', id = '' } = {}) {
     return posts.results.length > 0 ? posts.results[0] : null;
 }
 
-
-function create_excerpt(content: string) {
-    const text = htmlToText(content);
-    return text.length > 205 ? text.substring(0, 205) + '...' : text;
-}
-
-
-function format_publication_date(date:string) {
-    return DateTime.fromISO(date).toFormat('yyyy-MM-dd');
-}
