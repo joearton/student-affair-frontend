@@ -1,0 +1,55 @@
+# Dependency directories
+node_modules/
+.pnpm/
+
+# Build output
+.svelte-kit/
+build/
+dist/
+package/
+output/
+
+# Static analysis/cache
+.vscode/
+.eslintcache/
+.stylelintcache/
+.prettierignore
+.prettiercache
+.idea/
+.DS_Store
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System files
+*.swp
+*.lock
+
+# Svelte testing and debugging
+coverage/
+*.tsbuildinfo
+test-results/
+
+# SvelteKit specific
+__sapper__/            # For legacy Sapper projects
+.cypress/
+.cucumber/
+.playwright-cache/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Optional OS Files
+Thumbs.db
+Desktop.ini
