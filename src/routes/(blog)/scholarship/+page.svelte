@@ -10,6 +10,7 @@
     import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
     import { slugify } from '$lib/utils';
     import SimplePreloader from '$lib/components/SimplePreloader.svelte';
+    import ScholarshipItem from '$lib/components/scholarship/ScholarshipItem.svelte';
 
     let response_all = $state({results: [], previous: '', next: '', count: 0, limit: 10, offset: 0});
     let response_ongoing = $state({results: [], previous: '', next: '', count: 0, limit: 10, offset: 0});
@@ -28,11 +29,13 @@
     let ongoing_scholarship: Scholarship[] = $state([]);
     let faculties:Faculty[] = $state([]);
     let departments:Department[] = $state([]);
+    const sch_referer = 'guest';
 
 
     // pagination variable
     let previous_offset: number = 0;
     let next_offset: number = 0;
+
 
 
     function update_offsets() {
@@ -252,58 +255,16 @@
             {/if}
         {/if}
         {#each scholarships as scholarship}
-            <a href="{`/scholarship/${slugify(scholarship.name)}---${scholarship.code}`}" class="sch-item card bg-white border-0 shadow-sm my-5" style="border-radius: 0;">
+            <div class="sch-item d-block bg-white border-0 shadow-sm my-5" style="border-radius: 0;">
                 <div class="row g-0">
                     <div class="col-md-3">
                         <div class="h-100" style="background-image: url('{scholarship.thumbnail}'); background-size: cover;"></div>
                     </div>
                     <div class="col-md-9">
-                        <div class="card-body position-relative">
-                            <h5 class="card-title">{scholarship.name}</h5>
-                            <span class="position-absolute top-0 end-0 badge rounded-pill m-3"
-                                class:bg-success={scholarship.status == 'on-going'}
-                                class:bg-info={scholarship.status == 'coming-soon'}
-                                class:bg-danger={scholarship.status == 'closed'}> {scholarship.status_display}
-                            </span>
-                            <p class="card-text">{scholarship.sch_excerpt}</p>
-                            <div class="row small">
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-3"><strong>Source</strong></div>
-                                        <div class="col-md-9">: {scholarship.source_display}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3"><strong>Destination</strong></div>
-                                        <div class="col-md-9">: {scholarship.destination_display}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3"><strong>Target</strong></div>
-                                        <div class="col-md-9">: {scholarship.target_names.map(target => target[0]).join(', ')}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3"><strong>Kuota</strong></div>
-                                        <div class="col-md-9">: {scholarship.quota}</div>
-                                    </div>        
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-3"><strong>Start Date</strong></div>
-                                        <div class="col-md-9">: {scholarship.sch_start_date}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3"><strong>End Date</strong></div>
-                                        <div class="col-md-9">: {scholarship.sch_end_date}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3"><strong>Level</strong></div>
-                                        <div class="col-md-9">: {scholarship.level_display}</div>
-                                    </div>        
-                                </div>
-                            </div>
-                        </div>
+                        <ScholarshipItem {scholarship} {sch_referer}></ScholarshipItem>
                     </div>
                 </div>
-            </a>
+            </div>
         {/each}
         <nav>
             <ul class="pagination">

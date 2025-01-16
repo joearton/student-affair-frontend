@@ -3,9 +3,9 @@ import { addMessage } from '$lib/stores/messages';
 import { goto } from '$app/navigation';
 
 
-export const check_authentication = async () => {
+export const check_authentication = async (update:boolean = false) => {
     try {
-        const user = await api_request('me/');
+        const user = await api_request(`me/${update ? '?update=true' : ''}`);
         return user;
     } catch (error) {
         return false;
@@ -37,7 +37,6 @@ export const signin = async (username: string, password: string, captcha: string
         sessionStorage.setItem('access_token', access);
         sessionStorage.setItem('refresh_token', refresh);
 
-        addMessage('success', 'Please wait, redirecting...');
         return true;
     } catch (error) {
         if ((error as any).response && (error as any).response.status === 401) {

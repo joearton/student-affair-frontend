@@ -1,8 +1,13 @@
 
+export interface Eligible {
+    status: number;
+    scope: {};
+}
 
 export interface Scholarship  {
     id: string;
     name: string;
+    eligible: Eligible;
     status: string;
     status_display: string;
     start_date: string;

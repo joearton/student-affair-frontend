@@ -7,7 +7,11 @@
 
 <div class="d-flex align-items-center mb-4 border-bottom px-4 py-3">
     <div class="profile-icon">
-        <img src="{data.preference.site + data.user.user_picture || '/media/user.png'}" alt="{ data.user.fullname }" class="user-picture" />
+        {#if data.user.picture}
+            <img src="{data.preference.site + data.user.picture}" alt="{ data.user.fullname }" class="user-picture" />
+        {:else}
+            <img src="/media/user.png" alt="{ data.user.fullname }" class="user-picture" />
+        {/if}
     </div>
     <div class="ms-3">
         <div>Welcome</div>

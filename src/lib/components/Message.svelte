@@ -13,9 +13,9 @@
 <style>
     .messages-container {
         position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
+        bottom: 50px;
+        right: 30px;
+        z-index: 9999;
     }
     .message {
         margin-bottom: 10px;
@@ -23,7 +23,8 @@
         border-radius: 5px;
         cursor: pointer;
         color: #fff;
-        font-size: 14px;
+        font-size: 15px;
+        border: none;
     }
     .message.info {
         background-color: #007bff;

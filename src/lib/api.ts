@@ -21,22 +21,25 @@ if (typeof window !== 'undefined') {
 }
 
 
-export const api_request = async (endpoint: string, method: string = 'GET', data: any = null) => {
+export const api_request = async (endpoint: string, method: string = 'GET', data: any = null, as_data: boolean = true) => {
     try {
         const response = await api({
             url: endpoint,
             method: method,
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
             },
             data: data,
         });
-        return response.data;
+        if (as_data) {
+            return response.data;
+        } else {
+            return response;
+        }
     } catch (err) {
         if (axios.isAxiosError(err)) {
             if (err.response?.status === 401) {
                 console.error('Unauthorized request. Attempting to refresh token.');
-                return
                 const token_refreshed = await refresh_token();
                 if (token_refreshed) {
                     // Retry the original request
@@ -48,7 +51,11 @@ export const api_request = async (endpoint: string, method: string = 'GET', data
                         },
                         data: data,
                     });
-                    return retry_response.data;
+                    if (as_data) {
+                        return retry_response.data;
+                    } else {
+                        return retry_response;
+                    }
                 } else {
                     console.error('Token refresh failed. Please log in again.');
                     redirect(307, '/auth/signin');
