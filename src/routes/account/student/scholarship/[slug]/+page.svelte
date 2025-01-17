@@ -11,6 +11,7 @@
     const { data }: { data: LayoutData } = $props();
     const scholarship = data.scholarship;
     const mini_mode = true;
+    const user = data.user;
 
     let faculties: Faculty[] = $state([]);
     let departments: Department[] = $state([]);
@@ -24,5 +25,5 @@
 </script>
 
 <div class="scholarship-page py-5 px-4">
-    <ScholarshipDetail {scholarship} {faculties} {departments} {reading_time} {mini_mode}></ScholarshipDetail>
+    <ScholarshipDetail {scholarship} {user} {faculties} {departments} {reading_time} {mini_mode}></ScholarshipDetail>
 </div>

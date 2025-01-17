@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { format_publication_date } from '$lib/utils';
+    import { format_publication_date, slugify } from '$lib/utils';
     import type { Department, Faculty } from '$lib/types/scholarship_university';
 
-    const { scholarship, faculties, departments, reading_time, mini_mode } = $props();
+    const { scholarship, user, faculties, departments, reading_time, mini_mode } = $props();
 
     let nav_item_class = $state('h4');
     let nav_content_class = $state('lead');
@@ -25,9 +25,10 @@
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#requirements">Requirements</a>
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#attachment">Attachments</a>
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#schedule">Schedule</a>
+            <a class="py-3 border-bottom {nav_item_class} d-block" href="#targets">Targets</a>
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#faculty">Faculty</a>
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#department">Department</a>
-            <a class="my-3 {nav_item_class} btn btn-success w-100" href="#apply">Apply</a>
+            <a class="{nav_item_class} {scholarship.eligible.status ? 'btn btn-success my-3 w-100' : 'py-3 d-block'}" href="#apply">Apply</a>
         </div>
     </div>
     <div id="page-content" class="{nav_content_col} {mini_mode ? 'order-md-1 border-end' : 'order-md-2 border-start'}">
@@ -80,12 +81,29 @@
         <div id="schedule" class="mb-5 pb-3 border-bottom {nav_content_class}">
             <h3>Schedule</h3>
             <div class="row mb-3">
-                <div class="col-md-4">Start Date:</div>
+                <div class="col-md-4">
+                    <i class="fas fa-calendar-alt me-2 text-primary"></i> Start Date:
+                </div>
                 <div class="col-md-8 fw-bold">{format_publication_date(scholarship.start_date, "MMMM dd, yyyy 'at' hh:mm a")}</div>
             </div>
             <div class="row mb-3">
-                <div class="col-md-4">End Date:</div>
+                <div class="col-md-4">
+                    <i class="fas fa-calendar-alt me-2 text-primary"></i> End Date:
+                </div>
                 <div class="col-md-8 fw-bold">{format_publication_date(scholarship.end_date, "MMMM dd, yyyy 'at' hh:mm a")}</div>
+            </div>
+        </div>
+        <div id="targets" class="mb-5 pb-3 border-bottom {nav_content_class}">
+            <h3>Targets</h3>
+            <div class="my-3">
+                {#each scholarship.targets as target, index}
+                    <div class="lead">
+                        {#if scholarship.targets.length > 1}
+                            {index+1}.
+                        {/if}
+                        {target.name}
+                    </div>
+                {/each}
             </div>
         </div>
         <div id="faculty" class="mb-5 pb-3 border-bottom {nav_content_class}">
@@ -112,10 +130,14 @@
             <h3>Scholarship Application</h3>
             {#if scholarship.status === 'on-going'}
                 {#if scholarship.eligible.status == true}
-                    <div class="alert alert-success">Scholarship is eligible for you. You can apply here!</div>
-                    <div class="d-flex justify-content-center py-3">
-                        <a href="/scholarship/apply/{scholarship.code}" class="btn btn-success btn-lg">Apply Now</a>
-                    </div>
+                    {#if user.scholarship_applications && user.scholarship_applications.some((application: { scholarship_code: string }) => application.scholarship_code === scholarship.code)}
+                        <div class="alert alert-info">You have already applied for this scholarship.</div>
+                    {:else}
+                        <div class="alert alert-success">Scholarship is eligible for you. You can apply here!</div>
+                        <div class="d-flex justify-content-center py-3">
+                            <a href="/account/student/scholarship/apply/{slugify(scholarship.name)}---{scholarship.code}" class="btn btn-success btn-lg">Apply Now</a>
+                        </div>
+                    {/if}
                 {:else}
                     <div class="alert alert-danger">You are not eligible to apply for this scholarship.</div>
                     <table class="table table-bordered">
@@ -134,7 +156,7 @@
                                     <td>{key}</td>
                                     <td>{(value as { reason: string }).reason}</td>
                                     <td>
-                                        <i class="fas {value.status ? 'fa-check text-white bg-success' : 'fa-remove text-white bg-danger'} p-1 rounded"></i>
+                                        <i class="fas {(value as { status: boolean }).status ? 'fa-check text-white bg-success' : 'fa-remove text-white bg-danger'} p-1 rounded"></i>
                                     </td>
                                 </tr>
                             {/each}
@@ -168,5 +190,6 @@
         height: 90px; /* Tinggi navbar */
         margin-top: -90px;
     }
+
 
 </style>

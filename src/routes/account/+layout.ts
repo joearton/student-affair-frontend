@@ -17,9 +17,9 @@ export const load: LayoutLoad = async () => {
     const menu_items = {
         'student': [
             { href: "/account", icon: "fa-chart-simple", text: "Dashboard" },
-            { href: "/account/student/profile", icon: "fa-user", text: "Your Profile" },
+            { href: "/account/student/profile", icon: "fa-user", text: "Profile" },
             { href: "/account/student/scholarship", icon: "fa-award", text: "Scholarship" },
-            { href: "/account/student/my-scholarship", icon: "fa-scroll", text: "My Scholarship" },
+            { href: "/account/student/myscholarship", icon: "fa-scroll", text: "My Scholarship" },
         ],
         'reviewer': [
             { href: "/account", icon: "fa-chart-simple", text: "Dashboard" },
