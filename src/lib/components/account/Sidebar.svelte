@@ -32,7 +32,6 @@
     .sidebar {
         width: 100%;
         border-radius: 9px;
-        min-height: 500px;
         .nav-link {
             color: #333;
             font-size: 1rem;

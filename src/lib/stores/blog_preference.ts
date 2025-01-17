@@ -1,5 +1,26 @@
-export const stored_preference = {
-    live: false,
+import { writable } from 'svelte/store';
+
+interface BlogPreference {
+    site: string;
+    site_title: string;
+    site_subtitle: string;
+    site_description: string;
+    site_logo: string;
+    site_favicon: string;
+    contact_email: string;
+    contact_phone: string;
+    navbars: { title: string; link: string; icon: string | null; order: number; parent: number | null; preference: number; children: any[] }[];
+    social_medias: { facebook_url: string; twitter_url: string; instagram_url: string; linkedin_url: string; youtube_url: string };
+    page_setting: {
+        page_title: string;
+        page_description: string;
+        popup_info: string | null;
+        popup_image: string | null;
+        slideshows: { id: number; title: string; description: string; image: string; link: string | null; order: number }[];
+    };
+}
+
+export const preference = writable<BlogPreference>({
     site: '',
     site_title: "Biro Kemahasiswaan UMKO",
     site_subtitle: "Dukung Kreativitas, Wujudkan Inovasi!",
@@ -34,5 +55,4 @@ export const stored_preference = {
             { id: 3, title: "Biro Kemahasiswaan UMKO", description: "", image: "/media/slideshow/slide-3.jpg", link: null, order: 0 }
         ]
     }
-};
-  
+});

@@ -9,14 +9,14 @@
 </script>
 
 <div class="position-relative py-3 px-4">
-    <h3>
+    <h5>
         <a href="{sch_plink}/{slugify(scholarship.name)}---{scholarship.code}"
            class:text-success={scholarship.eligible.status === true}
            class:fw-bold={scholarship.eligible.status === true}
            class:text-muted={scholarship.status === "closed" || scholarship.eligible.status === false}>
             {scholarship.name}
         </a>
-    </h3>
+    </h5>
 
     <div class="position-absolute top-0 end-0 m-3">
         {#if sch_referer == "account"}

@@ -18,7 +18,7 @@
 
 <div class="pt-1 pb-3">
     <h5 class="fw-bold px-4 py-3 mb-3 border-bottom">Pendaftaran Beasiswa</h5>
-    <div class="px-4 py-3">
+    <div class="px-4 py-3 account-content">
         {#if sch_applications.length > 0}
             <table class="table bg-white">
                 <thead>
@@ -33,7 +33,7 @@
                     {#each sch_applications as application}
                         <tr>
                             <td>
-                                <a class="fw-bold" href={`/scholarship/${application.scholarship.id}`}>{application.scholarship.name}</a>
+                                <a class="fw-bold" href={`/account/student/myscholarship/${application.scholarship.code}`}>{application.scholarship.name}</a>
                             </td>
                             <td>{application.application_date}</td>
                             <td>{application.status}</td>

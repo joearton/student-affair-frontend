@@ -1,6 +1,7 @@
 import { api_request } from './api';
 import { addMessage } from '$lib/stores/messages';
 import { goto } from '$app/navigation';
+import { user as UserStore } from '$lib/stores/user';
 
 
 export const check_authentication = async (update:boolean = false) => {
@@ -27,7 +28,7 @@ export const signin = async (username: string, password: string, captcha: string
             return false;
         }
         
-        const { access, refresh } = response;
+        const { user, access, refresh } = response;
 
         if (access === undefined || refresh === undefined) {
             addMessage('error', 'Unable to get access token. Please try again later.');
@@ -37,7 +38,9 @@ export const signin = async (username: string, password: string, captcha: string
         sessionStorage.setItem('access_token', access);
         sessionStorage.setItem('refresh_token', refresh);
 
+        UserStore.set({username: user.username, email: user.email, groups: user.groups, fullname: user.fullname});
         return true;
+
     } catch (error) {
         if ((error as any).response && (error as any).response.status === 401) {
             addMessage('error', 'Login failed. Please check your username and password.');

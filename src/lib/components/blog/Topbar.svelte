@@ -1,4 +1,6 @@
 <script>
+    import { user } from "$lib/stores/user";
+
     let { preference } = $props();
 
     const email = preference.contact_email;
@@ -34,8 +36,12 @@
             <a href="tel:{phone}" class='me-3'>
                 <i class='fas fa-phone-alt'></i> Contact
             </a>
-            <a href='/auth/signin' rel="prefetch">
-                <i class='fa fa-user'></i> My Account
+            <a href={$user.username ? "/auth/validate" : "/auth/signin"} rel="prefetch">
+                {#if $user.username}
+                    <i class='fa fa-user'></i> {$user.fullname}!
+                {:else}
+                    <i class='fa fa-user'></i> My Account
+                {/if}
             </a>
         </div>    
     </div>

@@ -17,12 +17,12 @@
     <Topbar preference = {data.preference}></Topbar>
 </div>
 
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary {data.preference.live ? '' : 'offline'}">
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
     <Navbar preference = {data.preference}></Navbar>
 </nav>
 
 <main>
-    <Carousel preference = {data.preference}></Carousel>
+    <Carousel preference = {data.preference} page_setting = {data.page_setting}></Carousel>
     {@render children() }
 </main>
 

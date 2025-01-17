@@ -18,6 +18,7 @@
 		"@types/html-to-text": "^9.0.4",
 		"@types/luxon": "^3.4.2",
 		"@types/nodemailer": "^6.4.17",
+		"@types/simplemde": "^1.11.11",
 		"svelte": "^5.14.4",
 		"svelte-check": "^4.0.0",
 		"svelte-preprocess": "^6.0.3",
@@ -28,10 +29,12 @@
 		"@popperjs/core": "^2.11.8",
 		"axios": "^1.7.9",
 		"bootstrap": "^5.3.3",
+		"easymde": "^2.18.0",
 		"html-to-text": "^9.0.5",
 		"luxon": "^3.5.0",
 		"nodemailer": "^6.9.16",
 		"sass": "^1.70.0",
+		"simplemde": "^1.11.2",
 		"svelte-recaptcha": "^0.0.0"
 	}
 }
