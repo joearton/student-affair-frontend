@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { format_publication_date, slugify } from '$lib/utils';
+    import { format_publication_date } from '$lib/utils';
+    import { user } from "$lib/stores/user"
     import type { Department, Faculty } from '$lib/types/scholarship_university';
-
-    const { scholarship, user, faculties, departments, reading_time, mini_mode } = $props();
+    import { goto } from '$app/navigation';
+    
+    const { scholarship, faculties, departments, reading_time, mini_mode } = $props();
 
     let nav_item_class = $state('h4');
     let nav_content_class = $state('lead');
@@ -15,12 +17,26 @@
         nav_item_col = 'col-md-2';
         nav_content_col = 'col-md-10';
     }
+
+    const handle_apply_now = function () {
+        const modal = document.getElementById('applyModal');
+        if (modal) {
+            modal.classList.remove('show');
+        }
+        const backdrop = document.getElementsByClassName('modal-backdrop');
+        if (backdrop) {
+            if (backdrop.length > 0) {
+                backdrop[0].remove();
+            }
+        }
+        goto(`/account/student/scholarship/apply/${scholarship.code}/`);
+    }
 </script>
 
 
 <div class="row">
     <div id="page-nav" class="{nav_item_col} d-none d-md-block {mini_mode ? 'order-md-2' : 'order-md-1'}">
-        <div class="px-2 sticky-top {mini_mode ? '' : 'text-end'}" style="top: 100px;">
+        <div class="px-2 sticky-top {mini_mode ? '' : 'text-end'}" style="top: 100px; z-index: 1000;">
             <a class="{mini_mode ? 'pb-3' : 'py-3'} border-bottom {nav_item_class} d-block" href="#description">Description</a>
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#requirements">Requirements</a>
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#attachment">Attachments</a>
@@ -28,7 +44,11 @@
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#targets">Targets</a>
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#faculty">Faculty</a>
             <a class="py-3 border-bottom {nav_item_class} d-block" href="#department">Department</a>
-            <a class="{nav_item_class} {scholarship.eligible.status ? 'btn btn-success my-3 w-100' : 'py-3 d-block'}" href="#apply">Apply</a>
+            {#if mini_mode}
+                <a class="{nav_item_class} {scholarship.eligible.status ? 'btn btn-success my-3 w-100' : 'py-3 d-block'}" href="#apply">Apply</a>
+            {:else}
+                <a class="py-3 border-bottom {nav_item_class} d-block" href="#apply">Apply</a>
+            {/if}
         </div>
     </div>
     <div id="page-content" class="{nav_content_col} {mini_mode ? 'order-md-1 border-end' : 'order-md-2 border-start'}">
@@ -126,42 +146,70 @@
                 {/each}
             </div>
         </div>
+
         <div id="apply" class="mb-5 pb-3 border-bottom {nav_content_class}">
+            <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="applyModalLabel">Confirm Application</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to apply for this scholarship?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button id="btn-apply" class="btn btn-success" onclick={handle_apply_now}>Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <h3>Scholarship Application</h3>
             {#if scholarship.status === 'on-going'}
-                {#if scholarship.eligible.status == true}
-                    {#if user.scholarship_applications && user.scholarship_applications.some((application: { scholarship_code: string }) => application.scholarship_code === scholarship.code)}
-                        <div class="alert alert-info">You have already applied for this scholarship.</div>
+                {#if $user.authenticated === true}
+                    {#if scholarship.eligible.status === true}
+                        {#if $user.applications && $user.applications.some((application: { scholarship_code: string }) => application.scholarship_code === scholarship.code)}
+                            <div class="alert alert-info">
+                                You have already applied for this scholarship.
+                                Go to <a class="fw-bold" href="/account/student/myscholarship/">MyScholarship</a> to check the status.
+                            </div>
+                        {:else}
+                            <div class="alert alert-success">Scholarship is eligible for you. You can apply here!</div>
+                            <div class="d-flex justify-content-center py-3">
+                                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#applyModal">Apply Now</button>
+                            </div>
+                        {/if}
                     {:else}
-                        <div class="alert alert-success">Scholarship is eligible for you. You can apply here!</div>
-                        <div class="d-flex justify-content-center py-3">
-                            <a href="/account/student/scholarship/apply/{slugify(scholarship.name)}---{scholarship.code}" class="btn btn-success btn-lg">Apply Now</a>
-                        </div>
+                        <div class="alert alert-danger">You are not eligible to apply for this scholarship.</div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Scope</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {#each scholarship.eligible && Object.entries(scholarship.eligible.scopes) as [key, value]: [string, { reason: string }], index}
+                                    <tr>
+                                        <td>{index + 1}</td>
+                                        <td>{key}</td>
+                                        <td>{(value as { reason: string }).reason}</td>
+                                        <td>
+                                            <i class="fas {(value as { status: boolean }).status ? 'fa-check text-white bg-success' : 'fa-remove text-white bg-danger'} p-1 rounded"></i>
+                                        </td>
+                                    </tr>
+                                {/each}
+                            </tbody>
+                        </table>
                     {/if}
                 {:else}
-                    <div class="alert alert-danger">You are not eligible to apply for this scholarship.</div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Scope</th>
-                                <th>Reason</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {#each Object.entries(scholarship.eligible.scopes) as [key, value]: [string, { reason: string }], index}
-                                <tr>
-                                    <td>{index + 1}</td>
-                                    <td>{key}</td>
-                                    <td>{(value as { reason: string }).reason}</td>
-                                    <td>
-                                        <i class="fas {(value as { status: boolean }).status ? 'fa-check text-white bg-success' : 'fa-remove text-white bg-danger'} p-1 rounded"></i>
-                                    </td>
-                                </tr>
-                            {/each}
-                        </tbody>
-                    </table>
+                    <div class="alert alert-success">Scholarship is open now!</div>
+                    <div class="d-flex justify-content-center py-3">
+                        <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#applyModal">Apply Now</button>
+                    </div>
                 {/if}
             {:else if scholarship.status === 'coming-soon'}
                 <div class="alert alert-warning">Scholarship is coming soon. Stay tuned!</div>

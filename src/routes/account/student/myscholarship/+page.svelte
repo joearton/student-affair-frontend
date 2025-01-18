@@ -2,6 +2,7 @@
     import { api_request } from "$lib/api";
     import NoDataAvailable from "$lib/components/NoDataAvailable.svelte";
     import type { ScholarshipApplication } from "$lib/types/scholarship_application";
+    import { create_excerpt } from "$lib/utils";
     import { onMount } from "svelte";
 
     let sch_applications: ScholarshipApplication[] = $state([]);
@@ -20,32 +21,32 @@
     <h5 class="fw-bold px-4 py-3 mb-3 border-bottom">Pendaftaran Beasiswa</h5>
     <div class="px-4 py-3 account-content">
         {#if sch_applications.length > 0}
-            <table class="table bg-white">
-                <thead>
-                    <tr>
-                        <th>Nama Beasiswa</th>
-                        <th>Tanggal Pendaftaran</th>
-                        <th>Status</th>
-                        <th>Note</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {#each sch_applications as application}
-                        <tr>
-                            <td>
-                                <a class="fw-bold" href={`/account/student/myscholarship/${application.scholarship.code}`}>{application.scholarship.name}</a>
-                            </td>
-                            <td>{application.application_date}</td>
-                            <td>{application.status}</td>
-                            <td>
-                                <div class="note">{application.note || "-"}</div>
-                            </td>
-                        </tr>
-                    {/each}
-                </tbody>
-            </table>
+            <div class="list-group">
+                {#each sch_applications as application}
+                    <div class="list-group-item list-group-item-action bg-white border my-3 p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h4 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>{application.scholarship.name}</h4>
+                            <span class="badge bg-primary">{application.status}</span>
+                        </div>
+                        <p class="text-muted">{create_excerpt(application.scholarship.description)}</p>
+                        <p class="mb-2 text-muted">
+                            <i class="fas fa-calendar-alt" style="min-width: 21px;"></i>
+                            {application.application_date}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-info-circle" style="min-width: 21px;"></i>
+                            {create_excerpt(application.note || "No additional notes provided.")}
+                        </p>
+                        <a class="btn btn-outline-primary mt-2" href={`/account/student/myscholarship/${application.scholarship.code}`}>View Details</a>
+                    </div>
+                {/each}
+            </div>
         {:else}
-            <div class="py-5">
+            <div class="py-3">
+                <div class="alert alert-info">
+                    You have not applied for any scholarship yet. Search for scholarship in
+                    <a class="fw-bold" href="/account/student/scholarship/">Scholarship Page</a>
+                </div>
                 <NoDataAvailable></NoDataAvailable>
             </div>
         {/if}

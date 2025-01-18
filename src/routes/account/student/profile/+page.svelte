@@ -111,7 +111,7 @@
                 <p>{data.user.student.faculty_name}</p>
             </div>
         </div>
-        <div class="text-center my-3">
+        <div class="text-center my-5">
             <button class="btn btn-outline-primary" onclick="{update_from_siakad}">
                 <i class="fa fa-refresh"></i> Update From Siakad
             </button>

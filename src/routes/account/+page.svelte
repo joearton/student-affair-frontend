@@ -22,7 +22,7 @@
 <div class="px-4 pt-1 pb-5">
     <div class="row text-center g-4 mb-5">
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm text-primary">
+            <div class="card border-0 text-primary">
                 <div class="d-flex align-items-center ms-4">
                     <i class="fa-solid fa-award fs-1"></i>
                     <div class="card-body">
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm text-success">
+            <div class="card border-0 text-success">
                 <div class="d-flex align-items-center ms-4">
                     <i class="fa-solid fa-circle-check fs-1"></i>
                     <div class="card-body">
@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm text-danger">
+            <div class="card border-0 text-danger">
                 <div class="d-flex align-items-center ms-4">
                     <i class="fa-solid fa-circle-xmark fs-1"></i>
                     <div class="card-body">

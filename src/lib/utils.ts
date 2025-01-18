@@ -12,6 +12,7 @@ export const format_publication_date = (date:string, format: string = 'yyyy-MM-d
     return DateTime.fromISO(date).toFormat(format);
 }
 
+
 export const slugify = (text: string) => {
     return text
         .toString()

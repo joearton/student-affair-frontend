@@ -25,5 +25,5 @@
 </script>
 
 <div class="scholarship-page py-5 px-4">
-    <ScholarshipDetail {scholarship} {user} {faculties} {departments} {reading_time} {mini_mode}></ScholarshipDetail>
+    <ScholarshipDetail {scholarship} {faculties} {departments} {reading_time} {mini_mode}></ScholarshipDetail>
 </div>

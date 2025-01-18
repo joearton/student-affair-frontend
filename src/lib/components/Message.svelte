@@ -4,7 +4,7 @@
 
 <div class="messages-container">
     {#each $messages as { id, type, text }}
-        <button type="button" class="message {type}" onclick={() => removeMessage(id)} onkeydown={(e) => e.key === 'Enter' && removeMessage(id)} aria-label="Close message">
+        <button type="button" class="message {type} d-block" onclick={() => removeMessage(id)} onkeydown={(e) => e.key === 'Enter' && removeMessage(id)} aria-label="Close message">
             {text}
         </button>
     {/each}

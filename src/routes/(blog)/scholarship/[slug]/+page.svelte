@@ -11,7 +11,6 @@
     const { data }: { data: LayoutData } = $props();
     const scholarship = data.scholarship;
     const mini_mode = false;
-    const user = data.user || {};
 
     let faculties:Faculty[] = $state([]);
     let departments:Department[] = $state([]);
@@ -33,7 +32,7 @@
         </div>
     </div>
     <div class="scholarship-content container bg-white py-5 mb-5 rounded position-relative shadow-sm" style="margin-top: -35px;">
-        <ScholarshipDetail {scholarship} {user} {faculties} {departments} {reading_time} {mini_mode}></ScholarshipDetail>
+        <ScholarshipDetail {scholarship} {faculties} {departments} {reading_time} {mini_mode}></ScholarshipDetail>
     </div>
 </div>
 

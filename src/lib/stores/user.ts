@@ -1,12 +1,34 @@
 import { writable } from "svelte/store";
 
 
-interface User {
-    username: string;
-    email: string;
-    groups: string[];
-    fullname: string;
+interface Application {
+    scholarship_name: string;
+    scholarship_code: string;
+    application_date: string;
+    note: string;
+    status: string;
 }
 
 
-export const user = writable<User>({ username: '', email: '', groups: [], fullname: '' });
+interface User {
+    authenticated?: boolean;
+    fullname: string;
+    username: string;
+    email: string;
+    groups: string[];
+    applications: Application[];
+}
+
+export const user = writable<User>({
+    fullname: '',
+    username: '',
+    email: '',
+    groups: [],
+    applications: [{
+        scholarship_name: '',
+        scholarship_code: '',
+        application_date: '',
+        note: '',
+        status: ''
+    }],
+});
