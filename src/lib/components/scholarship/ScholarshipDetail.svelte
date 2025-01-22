@@ -1,8 +1,8 @@
 <script lang="ts">
     import { format_publication_date } from '$lib/utils';
     import { user } from "$lib/stores/user"
-    import type { Department, Faculty } from '$lib/types/scholarship_university';
     import { goto } from '$app/navigation';
+    import type { Department, Faculty } from '$lib/types/scholarship_university';
     
     const { scholarship, faculties, departments, reading_time, mini_mode } = $props();
 

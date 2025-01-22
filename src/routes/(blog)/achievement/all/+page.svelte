@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
     import { get_achievements } from '$lib/objects/ach_achievement';
-    import type { Achievement } from '$lib/types/ach_achivement';
+    import type { Achievement, Student } from '$lib/types/ach_achivement';
     import SimplePreloader from '$lib/components/SimplePreloader.svelte';
     import type { Department } from '$lib/types/scholarship_university';
     import { api_request } from '$lib/api';
@@ -28,6 +28,24 @@
     // pagination variable
     let previous_offset: number = 0;
     let next_offset: number = 0;
+
+
+    function get_student_names(students: Student[]) {
+        if (students.length <= 1) {
+            return students.map(student => student.name).join(', ');
+        }
+        const random_index = Math.floor(Math.random() * students.length);
+        return `${students[random_index].name} (${students.length - 1} More)`;
+    }
+
+
+    function get_student_departments(students: Student[]) {
+        if (students.length <= 1) {
+            return students.map(student => student.department_name).join(', ');
+        }
+        const random_index = Math.floor(Math.random() * students.length);
+        return `${students[random_index].department_name} (${students.length - 1} More)`;
+    }
 
 
     async function update_achievement(offset: number = 0) {
@@ -69,15 +87,15 @@
                         <div class="card h-100 bg-white border-0 shadow-sm">
                             <a href="/achievement/{achievement.id}" class="card-img-top position-relative" style="height: 300px; position: relative;">
                                 {#if achievement.photos && achievement.photos.length > 0}
-                                    {#if achievement.photos.length === 3}
-                                        <div class="d-flex h-100">
-                                            {#each achievement.photos as photo}
+                                    <div class="h-100 d-flex" style="background: url({achievement.photos[0].image}) center center; background-size: cover;">
+                                        {#if achievement.photos.length > 1}
+                                            {#each achievement.photos.slice(1, 3) as photo}
                                                 <div class="h-100" style="background: url({photo.image}) center center; background-size: cover; width: {100/achievement.photos.length}%"></div>
                                             {/each}
-                                        </div>
-                                    {:else}
-                                        <div class="h-100" style="background: url({achievement.photos[0].image}) center center; background-size: cover;"></div>
-                                    {/if}
+                                        {/if}
+                                    </div>
+                                {:else}
+                                    <div class="h-100" style="background: url(/media/no-thumbnail.png) center center; background-size: cover;"></div>
                                 {/if}
                                 <div class="achievement-title position-absolute bottom-0 p-3 w-100 text-white" style="background: rgba(0,0,0,.55);">
                                     <div class="small"><i class="far fa-calendar-alt"></i> {achievement.activity_date}</div>
@@ -86,8 +104,14 @@
                             </a>
                             <div class="card-body">
                                 <ul class="list-group list-group-flush small">
-                                    <li class="list-group-item"><i class="fas fa-user" style="width: 25px;"></i> {achievement.student.name}</li>
-                                    <li class="list-group-item"><i class="fas fa-user" style="width: 25px;"></i> {achievement.student.department_name}</li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-users" style="width: 25px;"></i>
+                                        {get_student_names(achievement.students)}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-building" style="width: 25px;"></i>
+                                        {get_student_departments(achievement.students)}
+                                    </li>
                                     <li class="list-group-item"><i class="fas fa-globe" style="width: 25px;"></i> {achievement.scope_display}</li>
                                     <li class="list-group-item"><i class="fas fa-trophy" style="width: 25px;"></i> {achievement.award}</li>
                                     <li class="list-group-item"><i class="fas fa-building" style="width: 25px;"></i> {achievement.organizer_name}</li>
@@ -164,6 +188,7 @@
     #filter-box {
         border-top-width: 7px;
         border-top-style: solid;
+        z-index: 1055;
     }
     .achievement-item {
         transition: transform 0.3s ease, box-shadow 0.3s ease;

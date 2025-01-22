@@ -1,8 +1,7 @@
-import type { Department } from "./scholarship_university";
 
 export interface Achievement {
     id: number;
-    student: Student;
+    students: Student[];
     activity_name: string;
     activity_date: Date;
     scope: string;
