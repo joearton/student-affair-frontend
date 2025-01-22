@@ -3,9 +3,9 @@
 </script>
 
 
-<div class="container">
+<div class="container position-relative">
     <a class="navbar-brand d-flex align-items-center" href="/">
-        <img src={preference.site_logo} alt="Brand Logo" class="me-2" style="height: 45px;" />
+        <img id="logo" src={preference.site_logo} alt="Brand Logo" class="shadow-sm" />
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,3 +36,12 @@
         </ul>
     </div>
 </div>
+
+<style>
+    #logo {
+        height: 81px;
+        position: absolute;
+        bottom: -33px;
+        border-radius: 5px;
+    }
+</style>

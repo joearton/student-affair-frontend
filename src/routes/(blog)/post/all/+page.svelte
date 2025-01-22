@@ -1,12 +1,13 @@
 <script lang='ts'>
     import { onMount } from 'svelte';
     import { get_posts } from '$lib/objects/blog_post';
+
     import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
+    import ShimmerLoader from '$lib/components/ShimmerLoader.svelte';
 
     import type { Post } from '$lib/types/blog_post';
     import { get_categories } from '$lib/objects/blog_category';
     import { get_tags } from '$lib/objects/blog_tags';
-    import ShimmerLoader from '$lib/components/ShimmerLoader.svelte';
 
     let response = $state({
         results: [],
@@ -28,7 +29,6 @@
     // pagination variable
     let previous_offset: number = 0;
     let next_offset: number = 0;
-    let pagination_limit: number = 1;
 
     function update_offsets() {
         if (response.previous) {
