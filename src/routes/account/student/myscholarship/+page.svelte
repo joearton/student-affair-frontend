@@ -39,7 +39,7 @@
                             <i class="fas fa-info-circle" style="min-width: 21px;"></i>
                             {application.note && application.note.length > 5 ? "You have a note from the committee" : "No notes provided."}
                         </p>
-                        <a class="btn btn-outline-primary mt-2" href={`/account/student/myscholarship/${application.scholarship.code}`}>View Details</a>
+                        <a class="btn btn-outline-primary mt-2" href={`/account/student/myscholarship/${application.code}`}>View Details</a>
                     </div>
                 {/each}
             </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import SocialMedia from '$lib/components/blog/SocialMedia.svelte';
     import type { LayoutData } from './$types';
 
     const { data }: { data: LayoutData } = $props();
@@ -19,7 +20,10 @@
         </div>
         <div id="page-content" class="col-md-9 border-start">
             <div id="quick-info" class="mb-5 pb-3 border-bottom">
-                <h1>{achievement.activity_name}</h1>
+                <h1 class='mb-2'>{achievement.activity_name}</h1>
+                <div class="mb-5 py-2">
+                    <SocialMedia centered={false}></SocialMedia>
+                </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><i class="fas fa-calendar" style="width: 25px;"></i> {achievement.activity_date}</li>
                     <li class="list-group-item"><i class="fas fa-globe" style="width: 25px;"></i> {achievement.scope_display}</li>
@@ -93,6 +97,8 @@
                         Download Attachment
                     </a>
                     <p class="mt-2">{achievement.attachment.name}</p>
+                {:else}
+                    <p>No attachments found for this achievement.</p>
                 {/if}
             </div>
         </div>

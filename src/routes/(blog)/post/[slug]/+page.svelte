@@ -3,6 +3,7 @@
     import { get_posts } from '$lib/objects/blog_post';
     import type { LayoutData } from './$types';
     import type { BlogPost } from '$lib/objects/blog_post';
+    import SocialMedia from '$lib/components/blog/SocialMedia.svelte';
 
     const { data }: { data: LayoutData } = $props();
     
@@ -41,7 +42,11 @@
 <div class="container bg-white my-3 py3 px-4">
     <article class="row border-bottom py-5 mb-3">
         <div class="col-md-3">
-            <div>
+            <div class="mb-5">
+                <h5 class='text-center mb-3 p-3 border-bottom'>Share This Post</h5>
+                <SocialMedia centered={true}></SocialMedia>
+            </div>
+            <div class="mb-5">
                 <div class="text-center">
                     <h5 class='text-center mb-3 p-3 border-bottom'>Tentang Penulis</h5>
                     <img src="{data.preference.site_protocol}://{data.post.author?.user_picture}" alt={data.post.author?.username} class="rounded-circle" width="100" height="100" />

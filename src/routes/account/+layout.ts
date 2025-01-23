@@ -27,7 +27,8 @@ export const load: LayoutLoad = async () => {
         ],
         'reviewer': [
             { href: "/account", icon: "fa-chart-simple", text: "Dashboard" },
-            { href: "/reviewer/assignment", icon: "fa-tasks", text: "Assignment" },
+            { href: "/account/reviewer/scholarship", icon: "fa-tasks", text: "Assignment" },
+            { href: "/", icon: "fa-newspaper", text: "View Site" },
         ]
     }
 

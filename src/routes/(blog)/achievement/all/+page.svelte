@@ -74,7 +74,7 @@
 
 
 
-<div class="post-section py-5 my-3">
+<div class="achievement-section py-5 my-3">
     <div class="container">
         {#if is_loading}
             <SimplePreloader></SimplePreloader>

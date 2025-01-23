@@ -1,6 +1,6 @@
 
 export interface Achievement {
-    id: number;
+    id: string;
     students: Student[];
     activity_name: string;
     activity_date: Date;
@@ -24,6 +24,7 @@ export interface Photo {
 export interface Student {
     name: string;
     id: string;
+    student_id: string;
     department_name: string;
 }
 

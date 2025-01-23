@@ -1,21 +1,26 @@
+import type { Student } from "./ach_achivement";
 import type { Scholarship } from "./scholarship";
 
+
 export interface ScholarshipApplication {
-    student: number;
+    id: string;
+    student: Student;
     scholarship: Scholarship;
     application_date: string; 
     note?: string;
-    status: ApplicationStatus;
+    status: string;
     self_description?: string;
     parent_income?: number;
     parent_occupation?: ParentOccupation;
     motivation?: string;
+    review?: Review;
 }
 
-export enum ApplicationStatus {
-    PENDING = 'PENDING',
-    ACCEPTED = 'ACCEPTED',
-    REJECTED = 'REJECTED'
+export interface Review {
+    expired_date: string;
+    status: string;
+    score: number;
+    comment?: string;
 }
 
 export enum ParentOccupation {

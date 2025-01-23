@@ -1,18 +1,28 @@
 <script lang='ts'>
     import { onMount } from 'svelte';
     import { get_posts } from '$lib/objects/blog_post';
+    import { get_achievements } from '$lib/objects/ach_achievement';
+    import { get_testimonials } from '$lib/objects/blog_testimonial';
 
     import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
 
-    import type { LayoutData } from '../$types';
     import type { Post } from '$lib/types/blog_post';
+    import type { Achievement } from '$lib/types/ach_achivement';
 
-    const { data }: { data: LayoutData} = $props();
+
     let posts:Post[] = $state([]);
+    let achievements:Achievement[] = $state([]);
+    let testimonials:Testimonial[] = $state([]);
 
     onMount(async () => {
-        const response = await get_posts({limit: 6});
-        posts = response.results || [];
+        const response_post = await get_posts({limit: 6});
+        posts = response_post.results || [];
+
+        const response_achievement = await get_achievements({limit: 3});
+        achievements = response_achievement.results;
+
+        const response_testimonial = await get_testimonials(6);
+        testimonials = response_testimonial.results;
     })
 
 </script>
@@ -106,7 +116,93 @@
 </div>
 
 
+<div class="achievement-section py-5 bg-primary">
+    <div class="container">
+        <h1 class="display-6 text-center text-white my-5">
+            <i class="fa fa-trophy"></i> Our Achievements
+        </h1>
+        {#if achievements.length === 0}
+            <NoDataAvailable></NoDataAvailable>
+        {:else}
+            <div class="row my-5 py-5">
+                {#each achievements as achievement}
+                    <div class="achievement-item col-md-4 mb-4">
+                        <div class="card h-100 bg-white border-0 shadow-sm">
+                            <a href="/achievement/{achievement.id}" class="card-img-top position-relative" style="height: 300px; position: relative;">
+                                {#if achievement.photos && achievement.photos.length > 0}
+                                    <div class="h-100 d-flex" style="background: url({achievement.photos[0].image}) center center; background-size: cover;">
+                                        {#if achievement.photos.length > 1}
+                                            {#each achievement.photos.slice(1, 3) as photo}
+                                                <div class="h-100" style="background: url({photo.image}) center center; background-size: cover; width: {100/achievement.photos.length}%"></div>
+                                            {/each}
+                                        {/if}
+                                    </div>
+                                {:else}
+                                    <div class="h-100" style="background: url(/media/no-thumbnail.png) center center; background-size: cover;"></div>
+                                {/if}
+                                <div class="achievement-title position-absolute bottom-0 p-3 w-100 text-white" style="background: rgba(0,0,0,.55);">
+                                    <div class="small"><i class="far fa-calendar-alt"></i> {achievement.activity_date}</div>
+                                    <h6>{achievement.activity_name}</h6>
+                                </div>
+                            </a>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush small">
+                                    <li class="list-group-item"><i class="fas fa-globe" style="width: 25px;"></i> {achievement.scope_display}</li>
+                                    <li class="list-group-item"><i class="fas fa-trophy" style="width: 25px;"></i> {achievement.award}</li>
+                                    <li class="list-group-item"><i class="fas fa-building" style="width: 25px;"></i> {achievement.organizer_name}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {/each}
+            </div>
+        {/if}
+    </div>
+</div>
+
+<!-- Testimonials Section -->
+<div class="testimonials-section py-5">
+    <div class="container my-3">
+        <h2 class="display-5 fw-bold mb-4 text-primary text-center">What People Say</h2>
+        <div class="row gy-4 my-5">
+            {#if testimonials.length === 0}
+                <NoDataAvailable></NoDataAvailable>
+            {:else}
+                {#each testimonials as testimonial}
+                    <div class="col-md-4">
+                        <div class="testimonial-card p-4 bg-white rounded shadow-sm">
+                            <div class="testimonial-content mb-3">
+                                <p class="text-muted">"{testimonial.content}"</p>
+                            </div>
+                            <div class="testimonial-author d-flex">
+                                <img src="{testimonial.image}" alt="{testimonial.name}" class="rounded-circle me-3" width="50" height="50">
+                                <div>
+                                    <h6 class="mb-0">{testimonial.name}</h6>
+                                    <small class="text-muted">{testimonial.position} {testimonial.company}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {/each}
+            {/if}
+        </div>
+    </div>
+</div>
+
+
 <style>
+    .testimonial-card {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .testimonial-author img {
+        border: 2px solid #007bff;
+    }
+
     .text-sm {
         font-size: 13px;
     }
