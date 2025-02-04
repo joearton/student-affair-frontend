@@ -6,6 +6,8 @@
 
     import EasyMDE from "easymde";
     import "easymde/dist/easymde.min.css";
+    import { redirect } from "@sveltejs/kit";
+    import { goto } from "$app/navigation";
 
     const { sch_application } = $props();
 
@@ -39,7 +41,19 @@
     ];
 
     let sch_application_agreement = $state(sch_application.status !== "DRAFT");
-    let form_data = $state({
+
+    interface FormDataType {
+        agree: boolean;
+        status: string;
+        self_description: string;
+        father_income: string;
+        father_occupation: string;
+        mother_income: string;
+        mother_occupation: string;
+        motivation: string;
+    }
+    
+    let form_data: FormDataType = $state({
         agree: false,
         status: sch_application.status,
         self_description: sch_application.self_description,
@@ -61,7 +75,7 @@
             { field: 'mother_occupation', label: "Mother's Occupation" }
         ];
 
-        const missingFields = requiredFields.filter(({ field }) => !form_data[field]).map(({ label }) => label);
+        const missingFields = requiredFields.filter(({ field }) => !(form_data as any)[field]).map(({ label }) => label);
 
         if (missingFields.length > 0) {
             addMessage("error", `Please fill in the following fields: ${missingFields.join(", ")}.`);
@@ -73,8 +87,8 @@
         const missingFiles = [];
         for (const link of fileLinks) {
             if (!(link as HTMLAnchorElement).href) {
-            const field_name = link.getAttribute("title");
-            missingFiles.push(field_name);
+                const field_name = link.getAttribute("title");
+                missingFiles.push(field_name);
             }
         }
         if (missingFiles.length > 0) {
@@ -95,16 +109,17 @@
         }
 
         form_data.agree = sch_application_agreement;
-        const response = await api_request(`scholarship_application/${sch_application.scholarship.code}/`, "PUT", form_data);
+        const response = await api_request(`scholarship_application/${sch_application.code}/`, "PUT", form_data);
         if (response.message) {
             addMessage("error", response.message);
         } else {
             addMessage("success", "Scholarship application submitted successfully");
+            goto("/account/student/myscholarship");
         }
     };
 
     const update_sch_application = async () => {
-        await api_request(`scholarship_application/${sch_application.scholarship.code}/`, "PUT", form_data);
+        await api_request(`scholarship_application/${sch_application.code}/`, "PUT", form_data);
         addMessage("success", "Data is updated...");
     };
 
@@ -166,117 +181,118 @@
 </script>
 
   
-<div class="pt-1 pb-3">
-    <div class="px-4 pb-5">
-        <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+<div class="bg-light rounded shadow-sm">
+    <div class="px-4 py-4">
+        <ul class="nav nav-pills nav-justified mb-4" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="information-tab" data-bs-toggle="tab" data-bs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="true">🎓 Informasi</button>
+                <button class="nav-link active fw-bold" id="information-tab" data-bs-toggle="tab" data-bs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="true">Informasi</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="form-tab" data-bs-toggle="tab" data-bs-target="#form" type="button" role="tab" aria-controls="form" aria-selected="false">Formulir Beasiswa</button>
+                <button class="nav-link fw-bold" id="form-tab" data-bs-toggle="tab" data-bs-target="#form" type="button" role="tab" aria-controls="form" aria-selected="false">Formulir</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab" aria-controls="upload" aria-selected="false">Lampiran</button>
+                <button class="nav-link fw-bold" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab" aria-controls="upload" aria-selected="false">Lampiran</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="submit-tab" data-bs-toggle="tab" data-bs-target="#submit" type="button" role="tab" aria-controls="submit" aria-selected="false">Ajukan</button>
+                <button class="nav-link fw-bold" id="submit-tab" data-bs-toggle="tab" data-bs-target="#submit" type="button" role="tab" aria-controls="submit" aria-selected="false">Ajukan</button>
             </li>
         </ul>
-        <div class="tab-content px-3 py-5" id="myTabContent">
+
+        <div class="tab-content p-4 bg-white rounded shadow-sm" id="myTabContent">
             <div class="tab-pane fade show active" id="information" role="tabpanel" aria-labelledby="information-tab">
                 <MyScholarshipInfo {sch_application}></MyScholarshipInfo>
             </div>
+
             <div class="tab-pane fade" id="form" role="tabpanel" aria-labelledby="form-tab">
-                <form class='border p-4 rounded'>
-                    <div class="row my-3">
-                        <div class="col-md-6">
-                            <label for="father_occupation" class="form-label">Father's Occupation:</label>
+                <form class="border p-4 rounded bg-light">
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <label for="father_occupation" class="form-label fw-semibold">Pekerjaan Ayah:</label>
                             <select id="father_occupation" class="form-select" bind:value={form_data.father_occupation} onchange={update_sch_application}>
                                 {#each occupations as occupation}
                                     <option value={occupation.value} selected={occupation.value === form_data.father_occupation}>{occupation.label}</option>
                                 {/each}
                             </select>
-                            <div class="form-text">Pilih pekerjaan ayah</div>
                         </div>
                         <div class="col-md-6">
-                            <label for="mother_occupation" class="form-label">Mother's Occupation:</label>
+                            <label for="mother_occupation" class="form-label fw-semibold">Pekerjaan Ibu:</label>
                             <select id="mother_occupation" class="form-select" bind:value={form_data.mother_occupation} onchange={update_sch_application}>
                                 {#each occupations as occupation}
                                     <option value={occupation.value} selected={occupation.value === form_data.mother_occupation}>{occupation.label}</option>
                                 {/each}
                             </select>
-                            <div class="form-text">Pilih pekerjaan ibu</div>
                         </div>
                     </div>
-            
-                    <div class="row my-3">
-                        <div class="col-md-6">
-                            <label for="father_income" class="form-label">Father's Monthly Income:</label>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <label for="father_income" class="form-label fw-semibold">Pendapatan Bulanan Ayah:</label>
                             <select id="father_income" class="form-select" bind:value={form_data.father_income} onchange={update_sch_application}>
                                 {#each incomes as income}
                                     <option value={income.value} selected={income.value === form_data.father_income}>{income.label}</option>
                                 {/each}
                             </select>
-                            <div class="form-text">Tuliskan pendapatan bulanan ayah</div>
                         </div>
                         <div class="col-md-6">
-                            <label for="mother_income" class="form-label">Mother's Monthly Income:</label>
+                            <label for="mother_income" class="form-label fw-semibold">Pendapatan Bulanan Ibu:</label>
                             <select id="mother_income" class="form-select" bind:value={form_data.mother_income} onchange={update_sch_application}>
                                 {#each incomes as income}
                                     <option value={income.value} selected={income.value === form_data.mother_income}>{income.label}</option>
                                 {/each}
                             </select>
-                            <div class="form-text">Tuliskan pendapatan bulanan ibu</div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="self_description" class="form-label">Description:</label>
-                        <textarea id="self_description" class="form-control"></textarea>
+
+                    <div class="mb-4">
+                        <label for="self_description" class="form-label fw-semibold">Deskripsi Diri:</label>
+                        <textarea id="self_description" class="form-control" rows="4"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="motivation" class="form-label">Motivation:</label>
-                        <textarea id="motivation" class="form-control"></textarea>
+                    <div class="mb-4">
+                        <label for="motivation" class="form-label fw-semibold">Motivasi:</label>
+                        <textarea id="motivation" class="form-control" rows="4"></textarea>
                     </div>
                 </form>
             </div>
+
             <div class="tab-pane fade" id="upload" role="tabpanel" aria-labelledby="upload-tab">
                 {#each sch_application.attachments as item}
                     <div class="bg-light py-4 px-3 mb-3 rounded shadow-sm">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="fw-bold text-info">{item.attachment.name}</span>
+                            <span class="fw-bold text-dark">{item.attachment.name}</span>
                             <span class="badge bg-info small" style="font-size: 11px;">
                                 {item.attachment.extensions} (Max: {item.attachment.max_size} KB)
                             </span>
                         </div>
-                        <div class="small text-muted mb-2">{item.attachment.description}</div>       
+                        <div class="small text-muted mb-2">{item.attachment.description}</div>
 
                         <a id="file-phd-{item.id}" href={item.file} target="_blank" title="{item.attachment.name}" class="btn file-phd btn-success btn-sm {item.file ? '' : 'd-none'}">
-                            <i class="fa fa-check"></i> View {item.attachment.name}
+                            <i class="fa fa-check"></i> Lihat {item.attachment.name}
                         </a>
 
                         <input type="file" class="form-control mt-2" accept={item.attachment.extensions} onchange={event => uploadFile(event, item.id)} />
                         <div class="mt-3">
-                            <label for="attachment-url-{item.attachment.id}" class="form-label mb-0">or provide a URL:</label>
+                            <label for="attachment-url-{item.attachment.id}" class="form-label mb-0 fw-semibold">Atau URL:</label>
                             <input type="url" id="attachment-url-{item.attachment.id}" class="form-control" placeholder="https://drive.google.com/..." />
                         </div>
-                    </div>    
+                    </div>
                 {/each}
             </div>
+
             <div class="tab-pane fade" id="submit" role="tabpanel" aria-labelledby="submit-tab">
-                <div class="alert alert-danger my-3" role="alert">
-                    Pastikan semua informasi yang Anda berikan sudah benar sebelum mengajukan beasiswa. <br />
-                    <b>Anda tidak dapat mengubah informasi setelah mengajukan beasiswa.</b>
+                <div class="alert alert-warning my-3" role="alert">
+                    Harap pastikan semua informasi sudah benar. <br />
+                    <b>Setelah diajukan, data tidak dapat diubah.</b>
                 </div>
                 <div id="application-agreement" class="form-check mb-3 d-none">
                     <input class="form-check-input" type="checkbox" id="agree" bind:checked={sch_application_agreement}>
                     <label class="form-check-label" for="agree">
-                        Saya menyetujui semua informasi yang diberikan adalah benar.
+                        Saya menyetujui semua informasi yang diberikan benar.
                     </label>
                 </div>
                 <div class="my-5 text-center">
-                    <button type="button" class="btn btn-outline-primary" onclick="{submit_sch_application}">
+                    <button type="button" class="btn btn-outline-primary fw-semibold px-4" onclick="{submit_sch_application}">
                         <i class="fa fa-paper-plane"></i> Ajukan Beasiswa
-                    </button>    
+                    </button>
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import { slugify } from "$lib/utils";
 
     let {user, menu_items } = $props();
 
@@ -13,8 +14,9 @@
             {#if user.groups.includes(group)}
                 {#each menu_items[group] as item}
                     <li class="nav-item">
-                        <a href={item.href} class="nav-link py-3 px-4 border-bottom" class:active={page.url.pathname === item.href}>
-                            <i class={`fas ${item.icon}`}></i> {item.text}
+                        <a id={slugify(item.text)} class:active={page.url.pathname === item.href}
+                           href={item.href} class="nav-link py-3 px-4 border-bottom"> 
+                           <i class={`fas ${item.icon}`}></i> {item.text} <span></span>
                         </a>
                     </li>
                 {/each}

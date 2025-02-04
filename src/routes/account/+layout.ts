@@ -19,16 +19,18 @@ export const load: LayoutLoad = async () => {
 
     const menu_items = {
         'student': [
-            { href: "/account", icon: "fa-chart-simple", text: "Dashboard" },
-            { href: "/account/student/profile", icon: "fa-user", text: "Profile" },
-            { href: "/account/student/scholarship", icon: "fa-award", text: "Scholarship" },
-            { href: "/account/student/myscholarship", icon: "fa-scroll", text: "My Scholarship" },
-            { href: "/", icon: "fa-newspaper", text: "View Site" },
+            { href: "/account", icon: "fa-solid fa-chart-simple", text: "Dashboard" },
+            { href: "/account/student/profile", icon: "fa-solid fa-user", text: "Profile" },
+            { href: "/account/student/scholarship", icon: "fa-solid fa-award", text: "Scholarship" },
+            { href: "/account/student/myscholarship", icon: "fa-solid fa-scroll", text: "My Scholarship" },
+            { href: "/", icon: "fa-solid fa-newspaper", text: "View Site" },
         ],
         'reviewer': [
-            { href: "/account", icon: "fa-chart-simple", text: "Dashboard" },
-            { href: "/account/reviewer/scholarship", icon: "fa-tasks", text: "Assignment" },
-            { href: "/", icon: "fa-newspaper", text: "View Site" },
+            { href: "/account", icon: "fa-solid fa-chart-simple", text: "Dashboard" },
+            { href: "/account/reviewer/scholarship", icon: "fa-solid fa-tasks", text: "Assignment" },
+            { href: "/account/reviewer/scholarship", icon: "fa-solid fa-check", text: "Approved" },
+            { href: "/account/reviewer/scholarship", icon: "fa-solid fa-times", text: "Rejected" },
+            { href: "/", icon: "fa-solid fa-newspaper", text: "View Site" },
         ]
     }
 

@@ -35,10 +35,10 @@
 
 </script>
 
-<div class="py-1">
+<div class="profile-container py-1">
     <!-- Profile -->
-    <div class="text-center mb-3 border-bottom px-3 py-4">
-        <div class="position-relative d-flex flex-column align-items-center">
+    <div class="profile-header text-center mb-3 border-bottom px-3 py-4">
+        <div class="profile-picture-container position-relative d-flex flex-column align-items-center">
             {#if user_picture_url }
                 <img src={data.preference.site + user_picture_url} class="user-picture" alt="User Profile" />
             {:else}
@@ -58,9 +58,9 @@
     </div>
 
     <!-- Bio -->
-    <div class="px-4 py-3">        
+    <div class="profile-bio px-4 py-3">        
         <!-- Student Details -->
-        <h5 class="card-title fw-bold mb-3">Student Detail</h5>
+        <h5 class="card-title fw-bold mb-3">Student Details</h5>
         <div class="row">
             <div class="col-md-6 mb-2">
                 <p class="mb-1 fw-bold">Fullname</p>
@@ -120,9 +120,43 @@
 </div>
 
 <style>
+    .profile-container {
+        background: #f9f9f9;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .profile-header {
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        color: #fff;
+        border-radius: 15px 15px 0 0;
+    }
+    .profile-picture-container {
+        position: relative;
+    }
     .user-picture {
-        border-radius: 11px;
+        border-radius: 50%;
         width: 125px;
-        height: 135px;
+        height: 125px;
+        object-fit: cover;
+        border: 4px solid #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .profile-bio {
+        background: #fff;
+        border-radius: 0 0 15px 15px;
+    }
+    .profile-bio h5 {
+        color: #333;
+    }
+    .profile-bio p {
+        color: #555;
+    }
+    .btn-outline-primary {
+        border-color: #6e8efb;
+        color: #6e8efb;
+    }
+    .btn-outline-primary:hover {
+        background: #6e8efb;
+        color: #fff;
     }
 </style>

@@ -2,7 +2,6 @@
     import { api_request } from "$lib/api";
     import NoDataAvailable from "$lib/components/NoDataAvailable.svelte";
     import type { ScholarshipApplication } from "$lib/types/scholarship_application";
-    import { format_publication_date, slugify } from "$lib/utils";
     import { onMount } from "svelte";
 
     let sch_applications: ScholarshipApplication[] = $state([]);
@@ -76,9 +75,9 @@
                                 <div class="text-muted small">{application.review?.expired_date}</div>
                             </td>
                             <td class="align-middle" >
-                                <button class="btn btn-outline-primary btn-sm" aria-label="Review">
+                                <a href="/account/reviewer/scholarship/{application.code}" aria-label="Review" class="btn btn-sm btn-outline-primary">
                                     <i class="fas fa-pencil"></i>
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     {/each}

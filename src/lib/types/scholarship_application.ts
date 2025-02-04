@@ -4,6 +4,7 @@ import type { Scholarship } from "./scholarship";
 
 export interface ScholarshipApplication {
     id: string;
+    code: string;
     student: Student;
     scholarship: Scholarship;
     application_date: string; 

@@ -8,81 +8,75 @@
     }
 </script>
 
-<div class="position-relative py-3 px-4">
-    <h5>
-        <a href="{sch_plink}/{slugify(scholarship.name)}---{scholarship.code}"
-           class:text-success={scholarship.eligible.status === true}
-           class:fw-bold={scholarship.eligible.status === true}
-           class:text-muted={scholarship.status === "closed" || scholarship.eligible.status === false}>
-            {scholarship.name}
-        </a>
-    </h5>
-
-    <div class="position-absolute top-0 end-0 m-3">
-        {#if sch_referer == "account"}
-            <span class="badge"
-                class:bg-success={scholarship.eligible.status === true}
-                class:bg-danger={scholarship.eligible.status === false}>
-                <i class={scholarship.eligible.status ? "fa fa-check" : "fa fa-remove"}></i>
-                {scholarship.eligible.status ? "Eligible" : "Not Eligible"}
+<div class="card shadow-sm border-0 m-4">
+    <div class="card-header border-0 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <a
+                href="{sch_plink}/{slugify(scholarship.name)}---{scholarship.code}"
+                class:text-success={scholarship.eligible.status === true}
+                class:fw-bold={scholarship.eligible.status === true}
+                class:text-muted={scholarship.status === "closed" || scholarship.eligible.status === false}
+            >
+                {scholarship.name}
+            </a>
+        </h5>
+        <div>
+            {#if sch_referer == "account"}
+                <span
+                    class="badge"
+                    class:bg-success={scholarship.eligible.status === true}
+                    class:bg-danger={scholarship.eligible.status === false}
+                >
+                    <i class={scholarship.eligible.status ? "fa fa-check" : "fa fa-remove"}></i>
+                    {scholarship.eligible.status ? "Eligible" : "Not Eligible"}
+                </span>
+            {/if}
+            <span
+                class="badge ms-2"
+                class:bg-success={scholarship.status === "on-going"}
+                class:bg-info={scholarship.status === "coming-soon"}
+                class:bg-danger={scholarship.status === "closed"}
+            >
+                {scholarship.status_display}
             </span>
-        {/if}
-        <span class="badge"
-            class:bg-success={scholarship.status === "on-going"}
-            class:bg-info={scholarship.status === "coming-soon"}
-            class:bg-danger={scholarship.status === "closed"}>
-            {scholarship.status_display}
-        </span>
-    </div>
-
-    <p class='small'>{scholarship.sch_excerpt}</p>
-    <div class="row small text-muted">
-        <div class="col-md-6">
-            <div class="row mb-1">
-                <div class="col-md-4">
-                    <strong><i class="fas fa-map-marker-alt"></i> Source</strong>
-                </div>
-                <div class="col-md-8">: {scholarship.source_display}</div>
-            </div>
-            <div class="row mb-1">
-                <div class="col-md-4">
-                    <strong><i class="fas fa-plane"></i> Destination</strong>
-                </div>
-                <div class="col-md-8">: {scholarship.destination_display}</div>
-            </div>
-            <div class="row mb-1">
-                <div class="col-md-4">
-                    <strong><i class="fas fa-bullseye"></i> Target</strong>
-                </div>
-                <div class="col-md-8">
-                    : {scholarship.target_names.map((target: any) => target[0]).join(", ")}
-                </div>
-            </div>
-            <div class="row mb-1">
-                <div class="col-md-4">
-                    <strong><i class="fas fa-users"></i> Quota</strong>
-                </div>
-                <div class="col-md-8">: {scholarship.quota}</div>
-            </div>
         </div>
-        <div class="col-md-6">
-            <div class="row mb-1">
-                <div class="col-md-4">
-                    <strong><i class="fas fa-calendar-alt"></i> Start Date</strong>
+    </div>
+    <div class="card-body">
+        <p class="small text-muted">
+            {scholarship.sch_excerpt}
+        </p>
+        <div class="row small text-muted">
+            <div class="col-md-6">
+                <div class="mb-1 d-flex">
+                    <strong class="me-2"><i class="fas fa-map-marker-alt"></i> Source</strong> 
+                    <span>{scholarship.source_display}</span>
                 </div>
-                <div class="col-md-8">: {scholarship.sch_start_date}</div>
+                <div class="mb-1 d-flex">
+                    <strong class="me-2"><i class="fas fa-plane"></i> Destination</strong>
+                    <span>{scholarship.destination_display}</span>
+                </div>
+                <div class="mb-1 d-flex">
+                    <strong class="me-2"><i class="fas fa-bullseye"></i> Target</strong>
+                    <span>{scholarship.target_names.map((t: any) => t[0]).join(", ")}</span>
+                </div>
+                <div class="mb-1 d-flex">
+                    <strong class="me-2"><i class="fas fa-users"></i> Quota</strong>
+                    <span>{scholarship.quota}</span>
+                </div>
             </div>
-            <div class="row mb-1">
-                <div class="col-md-4">
-                    <strong><i class="fas fa-calendar-check"></i> End Date</strong>
+            <div class="col-md-6">
+                <div class="mb-1 d-flex">
+                    <strong class="me-2"><i class="fas fa-calendar-alt"></i> Start Date</strong>
+                    <span>{scholarship.sch_start_date}</span>
                 </div>
-                <div class="col-md-8">: {scholarship.sch_end_date}</div>
-            </div>
-            <div class="row mb-1">
-                <div class="col-md-4">
-                    <strong><i class="fas fa-graduation-cap"></i> Level</strong>
+                <div class="mb-1 d-flex">
+                    <strong class="me-2"><i class="fas fa-calendar-check"></i> End Date</strong>
+                    <span>{scholarship.sch_end_date}</span>
                 </div>
-                <div class="col-md-8">: {scholarship.level_display}</div>
+                <div class="mb-1 d-flex">
+                    <strong class="me-2"><i class="fas fa-graduation-cap"></i> Level</strong>
+                    <span>{scholarship.level_display}</span>
+                </div>
             </div>
         </div>
     </div>

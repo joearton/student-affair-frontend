@@ -8,11 +8,11 @@ import { error } from '@sveltejs/kit';
 
 
 export const load: PageLoad = async ({ params }) => {
-    const code = params.slug;
-    const response = await api_request('scholarship_application/', 'POST', { code: code });
+    const scholarship_code = params.slug;
+    const response = await api_request('scholarship_application/', 'POST', { code: scholarship_code });
     if (response.scholarship) {
         addMessage('success', 'Please fill out the form to apply for this scholarship.');
-        redirect(301, `/account/student/myscholarship/${code}`);
+        redirect(301, `/account/student/myscholarship/${response.code}`);
     } else {
         addMessage('error', response.message);
         error(420, response.message);

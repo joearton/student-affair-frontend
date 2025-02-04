@@ -28,6 +28,7 @@
 
         try {
             const state = await signin(username, password, captcha, captcha_key);
+            console.log(state);
             if (state === true) {
                 goto('/auth/validate');
             } else {
