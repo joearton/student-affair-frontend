@@ -7,7 +7,7 @@ import type { LayoutLoad } from './$types';
 export const load: LayoutLoad = async () => {
     const preference_store = get(preference);
 
-    if (!preference_store.site) {
+    if (preference_store && !preference_store.site) {
         const response = await api_request('preference/');
         preference.set(response);
     }
