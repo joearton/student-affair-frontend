@@ -37,11 +37,22 @@
     </div>
 </div>
 
+
 <style>
+
     #logo {
         height: 81px;
         position: absolute;
         bottom: -33px;
         border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+        #logo {
+            height: 65px;
+            position: relative;
+            bottom: 0px;
+            border-radius: 0px;
+        }
     }
 </style>

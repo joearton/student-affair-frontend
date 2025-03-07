@@ -12,7 +12,7 @@
     });
 </script>
 
-{#if page_setting }
+{#if page_setting && page_setting.slideshows && page_setting.slideshows.length > 0}
     {#if is_loading}
         <ShimmerLoader count=3 height=100></ShimmerLoader>
     {:else}

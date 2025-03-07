@@ -7,6 +7,7 @@
     import Carousel from '$lib/components/blog/Carousel.svelte';
     import Footer from '$lib/components/blog/Footer.svelte';
     import ClipPath from '$lib/components/ClipPath.svelte';
+    import PopupWindow from '$lib/components/blog/PopupWindow.svelte';
 
     let { data, children }: { data: LayoutData, children: Snippet } = $props();
 </script>
@@ -24,6 +25,11 @@
 <main>
     <Carousel preference = {data.preference} page_setting = {data.page_setting}></Carousel>
     {@render children() }
+    <PopupWindow 
+        site_url = {data.preference.site}
+        popup_image = {data.page_setting.popup_image}
+        popup_info = {data.page_setting.popup_info}>
+    </PopupWindow>
 </main>
 
 <footer class="footer bg-primary text-white py-4">

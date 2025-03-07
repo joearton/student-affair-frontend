@@ -8,16 +8,19 @@
     import Message from '$lib/components/Message.svelte';
 
     let { data, children }: { data: LayoutData, children: Snippet } = $props();
-    let section_title = data.preference.page_setting?.page_title || page.data.title || "";
+    let section_title = page.data.title || "";
     if (section_title.length > 0) {
         section_title = section_title + " | ";
     }
     let page_title = section_title + data.preference.site_title;
+    let section_desc = page.data.description || "";
+
 </script>
 
 
 <svelte:head>
     <title>{page_title}</title>
+    <meta name="description" content="{section_desc}" />
 </svelte:head>
 
 

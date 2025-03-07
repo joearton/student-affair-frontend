@@ -117,7 +117,7 @@
 
     .post-thumbnail {
         position: relative;
-        height: 85vh;
+        height: 75vh;
         clip-path: url(#path-15);
     }
 
@@ -146,6 +146,12 @@
     .related-posts .card-img-top {
         height: 200px;
         object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+        .post-thumbnail {
+            height: 300px;
+        }
     }
 
 </style>

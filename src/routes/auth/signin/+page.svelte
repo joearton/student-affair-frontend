@@ -47,20 +47,20 @@
 </script>
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card bg-white border-0 shadow-lg" style="max-width: 950px; width: 100%;">
+    <div class="card border-0 shadow-lg" style="max-width: 950px; width: 100%;">
         <div class="row g-0">
             <!-- Left Section with Illustration -->
             <div class="col-md-7 d-flex flex-column justify-content-center bg-info text-white px-4">
                 <h1 class="h3 mb-1">{ data.preference.site_title }</h1>
                 <p class="lead">Please sign in to continue.</p>
-                <p class="py-5">Mahasiswa baru/aktif, gunakan NIM sebagai username dan tanggal lahir (yyyymmdd) @ 4 digit terakhir nomor handphone di Siakad sebagai kata sandi. Pastikan semua data di Siakad telah lengkap. Contoh penulisan kata sandi 19901127@2904.</p>
+                <p class="py-3">Mahasiswa baru/aktif, gunakan NIM sebagai username dan tanggal lahir (yyyymmdd) @ 4 digit terakhir nomor handphone di Siakad sebagai kata sandi. Pastikan semua data di Siakad telah lengkap. Contoh penulisan kata sandi 19901127@2904.</p>
                 <div class="mt-3">
                     <a href="/" class="btn btn-light">Back to Home</a>
                 </div>
             </div>
 
             <!-- Right Section with Form -->
-            <div class="col-md-5">
+            <div class="col-md-5 bg-white">
                 <div class="card-body px-4 py-5">
                     <h2 class="text-center mb-4">Sign In</h2>
                     
@@ -101,3 +101,17 @@
         </div>
     </div>
 </div>
+
+<style>
+    @media (max-width: 768px) {
+        .shadow-lg {
+            box-shadow: none !important;
+        }
+        .col-md-7 {
+            padding-top: 21px !important;
+            padding-bottom: 21px !important;
+            margin-top: 15px !important;
+            margin-bottom: 15px !important;
+        }
+    }
+</style>

@@ -124,7 +124,7 @@
         {#if achievements.length === 0}
             <NoDataAvailable></NoDataAvailable>
         {:else}
-            <div class="row my-5 py-5">
+            <div class="achievement-grid row my-5 py-5">
                 {#each achievements as achievement}
                     <div class="achievement-item col-md-4 mb-4">
                         <div class="card h-100 bg-white border-0 shadow-sm">
@@ -162,7 +162,7 @@
 
 <!-- Testimonials Section -->
 <div class="testimonials-section py-5">
-    <div class="container my-3">
+    <div class="testimonials-container container my-3">
         <h2 class="display-5 fw-bold mb-4 text-primary text-center">What People Say</h2>
         <div class="row gy-4 my-5">
             {#if testimonials.length === 0}
@@ -241,6 +241,29 @@
     .post-thumbnail {
         position: relative;
         height: 215px;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .features-section {
+            clip-path: none;
+        }
+        .achievement-section {
+            padding-top: 37px !important;
+            padding-bottom: 0px !important;
+            .display-6 {
+                margin: 0px !important;
+            }
+        }
+        .achievement-grid {
+            margin-top: 0px !important;
+        }
+        .testimonials-section {
+            padding-top: 30px !important;
+            padding-bottom: 0px !important;
+        }
+        .testimonials-container {
+            margin-top: 7px !important;
+        }
     }
 
 </style>
