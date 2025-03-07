@@ -18,6 +18,9 @@ const config = {
 		adapter: adapter({
 			out: 'build',
 			precompress: false,
+			env: {
+				port: 3001
+			}
 		}),
 	}
 };
