@@ -32,7 +32,7 @@
         <div class="position-absolute post-thumbnail-label">
             <h1 class="h4 bg-primary post-title fw-bold text-warning mb-0 p-3">{data.post.title}</h1>
             {#if data.post.subtitle}
-                <p class="post-subtitle bg-warning post-subtitle p-3 m-0">{data.post.post_excerpt}</p>
+                <p class="post-subtitle bg-warning post-subtitle p-3 m-0 d-none d-md-block">{data.post.post_excerpt}</p>
             {/if}
         </div>
     </div>

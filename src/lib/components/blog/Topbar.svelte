@@ -30,11 +30,11 @@
         </div>
     
         <div class='d-flex contact-info'>
-            <a href="mailto:{email}" class='me-3'>
-                <i class='fas fa-envelope'></i> Email
+            <a href="mailto:{email}" class='me-3' aria-label="Email">
+                <i class='fas fa-envelope'></i>
             </a>
-            <a href="tel:{phone}" class='me-3'>
-                <i class='fas fa-phone-alt'></i> Contact
+            <a href="tel:{phone}" class='me-3' aria-label="Phone">
+                <i class='fas fa-phone-alt'></i>
             </a>
             <a href={$user.username ? "/auth/validate" : "/auth/signin"} rel="prefetch">
                 {#if $user.username}

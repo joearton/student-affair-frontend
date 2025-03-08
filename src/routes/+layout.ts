@@ -3,6 +3,7 @@ import { preference } from '$lib/stores/blog_preference';
 import { get } from 'svelte/store';
 import type { LayoutLoad } from './$types';
 
+export const ssr = true;
 
 export const load: LayoutLoad = async () => {
     const preference_store = get(preference);

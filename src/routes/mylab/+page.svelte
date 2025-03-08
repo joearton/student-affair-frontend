@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { fly } from 'svelte/transition';
-
     let info = "Drag the item into the matching box.";
     let showForm = true;
 
@@ -29,70 +27,86 @@
 <style>
     :global(body) {
         margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f7f9fc;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background: #F2F4F8;
         color: #333;
-    }
-    .container {
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 100vh;
     }
-    .spinner {
-        border: 6px solid #ddd;
-        border-top: 6px solid #3498db;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-        margin-bottom: 1em;
+
+    .container {
+        background: #fff;
+        padding: 2em;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        text-align: center;
+        width: 360px;
     }
+
+    .spinner {
+        border: 5px solid #eee;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1em;
+    }
+
     @keyframes spin {
         to {
             transform: rotate(360deg);
         }
     }
+
     p {
-        margin-bottom: 2em;
-        text-align: center;
+        margin: 1em 0;
     }
+
     .draggable {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
         background-color: #3498db;
+        color: #fff;
         border-radius: 8px;
-        cursor: grab;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #fff;
         font-weight: bold;
-        margin: 1em;
-        transition: transform 0.2s;
+        cursor: grab;
+        transition: transform 0.5s ease-out, box-shadow 0.5s ease-out;
+        margin: 1em auto;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
+
     .draggable:hover {
-        transform: scale(1.1);
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
+
     .droppable {
         width: 100px;
         height: 100px;
-        border: 2px dashed #888;
+        border: 2px dashed #bbb;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 8px;
-        transition: background 0.2s;
+        margin: 1em auto;
+        transition: background 0.3s, border-color 0.3s;
     }
+
     .droppable:hover {
-        background: #f0f0f0;
+        background: #F9F9F9;
+        border-color: #3498db;
     }
 </style>
 
 <div class="container">
     {#if showForm}
-        <div transition:fly={{ x: 200, duration: 500 }}>
+        <div>
             <div class="spinner"></div>
             <p>{info}</p>
             <div
@@ -114,7 +128,7 @@
             </div>
         </div>
     {:else}
-        <div transition:fly={{ x: -200, duration: 500 }}>
+        <div>
             <p>You will be redirected in 3 seconds...</p>
         </div>
     {/if}
