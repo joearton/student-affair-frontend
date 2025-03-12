@@ -3,6 +3,7 @@
     import { get_posts } from '$lib/objects/blog_post';
     import { get_achievements } from '$lib/objects/ach_achievement';
     import { get_testimonials } from '$lib/objects/blog_testimonial';
+    import { _ } from 'svelte-i18n';
 
     import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
 
@@ -30,10 +31,10 @@
 <!-- Mahasiswa Baru -->
 <div class="new-student-section py-5 position-relative bg-light">
     <div class="container text-center py-5">
-        <h2 class="display-5 text-primary mb-1 fw-bold">Pendaftaran Mahasiswa Baru</h2>
-        <p class="lead mb-4">Bergabunglah bersama kami untuk masa depan lebih cerah.</p>
+        <h2 class="display-5 text-primary mb-1 fw-bold">{$_('blog.newstudent.heading')}</h2>
+        <p class="lead mb-4">{$_('blog.newstudent.description')}</p>
         <a href="https://pmb.umko.ac.id" class="btn btn-primary btn-lg px-5 py-2 shadow-lg rounded-pill">
-            <i class="fa fa-link"></i> Daftar Sekarang
+            <i class="fa fa-link"></i> {$_('blog.newstudent.button')}
         </a>
     </div>
 </div>
@@ -41,8 +42,8 @@
 <!-- Features Section -->
 <div class="features-section py-5 bg-primary">
     <div class="container text-center">
-        <h2 class="fw-bold mb-2 text-warning">Mengapa Memilih Kami?</h2>
-        <p class="mb-5 text-white">Kami memberikan yang terbaik untuk memastikan kesuksesan Anda.</p>
+        <h2 class="fw-bold mb-2 text-warning">{$_('blog.features.heading')}</h2>
+        <p class="mb-5 text-white">{$_('blog.features.description')}</p>
         <div class="row gy-4">
             <div class="col-md-3">
                 <div class="feature-card py-4 px-3 bg-white rounded">
@@ -50,7 +51,7 @@
                         <i class='fa fa-university'></i>
                     </div>
                     <h3 class="fw-bold">+11</h3>
-                    <p>Pilihan Program Studi</p>
+                    <p>{$_('blog.features.cards.programStudy')}</p>
                 </div>
             </div>
             <div class="col-md-3">
@@ -59,7 +60,7 @@
                         <i class="fa fa-user-graduate"></i>
                     </div>
                     <h3 class="fw-bold">5000+</h3>
-                    <p class="text-muted">Alumni telah Bekerja</p>
+                    <p class="text-muted">{$_('blog.features.cards.alumni')}</p>
                 </div>
             </div>
             <div class="col-md-3">
@@ -68,7 +69,7 @@
                         <i class="fa fa-users"></i>
                     </div>
                     <h3 class="fw-bold">50+</h3>
-                    <p class="text-muted">Dosen Tersertifikasi</p>
+                    <p class="text-muted">{$_('blog.features.cards.lecturers')}</p>
                 </div>
             </div>
             <div class="col-md-3">
@@ -77,7 +78,7 @@
                         <i class="fa fa-trophy"></i>
                     </div>
                     <h3 class="fw-bold">100+</h3>
-                    <p class="text-muted">Prestasi Dosen dan Mahasiswa</p>
+                    <p class="text-muted">{$_('blog.features.cards.prestasi')}</p>
                 </div>
             </div>
         </div>
@@ -119,7 +120,7 @@
 <div class="achievement-section py-5 bg-primary">
     <div class="container">
         <h1 class="display-6 text-center text-white my-5">
-            <i class="fa fa-trophy"></i> Our Achievements
+            <i class="fa fa-trophy"></i> {$_('blog.achievements.heading')}
         </h1>
         {#if achievements.length === 0}
             <NoDataAvailable></NoDataAvailable>
@@ -163,7 +164,7 @@
 <!-- Testimonials Section -->
 <div class="testimonials-section py-5">
     <div class="testimonials-container container my-3">
-        <h2 class="display-5 fw-bold mb-4 text-primary text-center">What People Say</h2>
+        <h2 class="display-5 fw-bold mb-4 text-primary text-center">{$_('blog.testimonials.heading')}</h2>
         <div class="row gy-4 my-5">
             {#if testimonials.length === 0}
                 <NoDataAvailable></NoDataAvailable>

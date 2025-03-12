@@ -1,7 +1,10 @@
+import type { LayoutLoad } from './$types';
+import { browser } from '$app/environment';
 import { api_request } from '$lib/api.js';
 import { preference } from '$lib/stores/blog_preference';
 import { get } from 'svelte/store';
-import type { LayoutLoad } from './$types';
+import '$lib/i18n';
+import { locale, waitLocale } from 'svelte-i18n'
 
 
 export const load: LayoutLoad = async () => {
@@ -12,5 +15,9 @@ export const load: LayoutLoad = async () => {
         preference.set(response);
     }
 
+    if (browser) {
+		locale.set('id')
+	}
+    await waitLocale()
     return { preference: get(preference) };
 };

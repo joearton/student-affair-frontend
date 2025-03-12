@@ -39,6 +39,7 @@
 		"nodemailer": "^6.9.16",
 		"sass": "^1.70.0",
 		"simplemde": "^1.11.2",
+		"svelte-i18n": "^4.0.1",
 		"svelte-recaptcha": "^0.0.0"
 	}
 }

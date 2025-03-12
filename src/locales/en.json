@@ -1,0 +1,40 @@
+{
+    "akun": "Account",
+    "blog": {
+        "newstudent": {
+            "heading": "New Student Registration",
+            "description": "Join us for a brighter future.",
+            "button": "Register Now"
+        },
+        "features": {
+            "heading": "Why Choose Us?",
+            "description": "We provide the best to ensure your success.",
+            "cards": {
+                "programStudy": "Study Program Options",
+                "alumni": "Employed Alumni",
+                "lecturers": "Certified Lecturers",
+                "prestasi": "Full of Achievements"
+            }
+        },
+        "achievements": {
+            "heading": "Our Achievements"
+        },
+        "testimonials": {
+            "heading": "What They Say"
+        }
+    },
+    "auth": {
+        "signin": {
+            "title": "Sign In",
+            "username": "Username",
+            "password": "Password",
+            "captcha": "Enter Captcha",
+            "forgot_password": "Forgot password?",
+            "signin_button": "Sign In",
+            "loading": "Loading...",
+            "description": "Please sign in to continue.",
+            "instructions": "New/active students, use your NIM as the username and your date of birth (yyyymmdd) @ last 4 digits of your phone number in Siakad as the password. Ensure all data in Siakad is complete. Example password format: 19901127@2904.",
+            "back_to_home": "Back to Home"
+        }
+    }
+}

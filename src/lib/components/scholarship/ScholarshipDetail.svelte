@@ -92,7 +92,7 @@
                                     {attachment.types} (Max: {attachment.max_size} KB)
                                 </span>
                             </div>
-                            <div class="small text-muted">{attachment.description}</div>
+                            <div class="small text-muted">{@html attachment.description}</div>
                         </div>
                     </div>
                 {/each}
@@ -212,10 +212,8 @@
                     </div>
                 {/if}
             {:else if scholarship.status === 'coming-soon'}
-                <div class="alert alert-warning">Scholarship is coming soon. Stay tuned!</div>
-                <div class="mt-3">
-                    <p>Opens on: {format_publication_date(scholarship.start_date, "MMMM dd, yyyy 'at' hh:mm a")}</p>
-                    <p>Ends on: {format_publication_date(scholarship.end_date, "MMMM dd, yyyy 'at' hh:mm a")}</p>
+                <div class="alert alert-warning">
+                    Scholarship is coming soon and will be open on <b>{format_publication_date(scholarship.start_date, "MMMM dd, yyyy 'at' HH:mm")}</b>. Stay tuned!
                 </div>
             {:else if scholarship.status === 'closed'}
                 <div class="alert alert-danger">Scholarship is currently closed.</div>

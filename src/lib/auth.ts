@@ -50,7 +50,7 @@ export const signin = async (username: string, password: string, captcha: string
 };
 
 
-export const logout = () => {
+export const logout = async () => {
     UserStore.set({
         authenticated: false,
         fullname: '',
@@ -62,7 +62,7 @@ export const logout = () => {
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('refresh_token');
     addMessage('success', 'Logged out successfully.');
-    goto('/auth/signin');
+    await goto('/auth/signin');
 };
 
 

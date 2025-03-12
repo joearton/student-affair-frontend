@@ -34,7 +34,7 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                     <li><a class="dropdown-item" href="/account/profile">Profile</a></li>
-                    <li><a class="dropdown-item" href="#logout" onclick={logout}>Logout</a></li>
+                    <li><a class="dropdown-item" href="/auth/signin" onclick={logout}>Logout</a></li>
                 </ul>
             </div>
         </div>

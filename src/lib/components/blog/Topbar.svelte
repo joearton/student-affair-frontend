@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
     import { user } from "$lib/stores/user";
+    import { _ } from 'svelte-i18n';
 
     let { preference } = $props();
 
@@ -30,17 +31,17 @@
         </div>
     
         <div class='d-flex contact-info'>
-            <a href="mailto:{email}" class='me-3' aria-label="Email">
+            <a href="mailto:{email}" class='me-1' aria-label="Email">
                 <i class='fas fa-envelope'></i>
             </a>
-            <a href="tel:{phone}" class='me-3' aria-label="Phone">
+            <a href="tel:{phone}" class='me-1' aria-label="Phone">
                 <i class='fas fa-phone-alt'></i>
             </a>
             <a href={$user.username ? "/auth/validate" : "/auth/signin"} rel="prefetch">
                 {#if $user.username}
                     <i class='fa fa-user'></i> {$user.fullname}!
                 {:else}
-                    <i class='fa fa-user'></i> My Account
+                    <i class='fa fa-user'></i> {$_('akun')}
                 {/if}
             </a>
         </div>    

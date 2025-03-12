@@ -1,0 +1,40 @@
+{
+    "akun": "Akun",
+    "blog": {
+        "newstudent": {
+            "heading": "Pendaftaran Mahasiswa Baru",
+            "description": "Bergabunglah bersama kami untuk masa depan lebih cerah.",
+            "button": "Daftar Sekarang"
+        },
+        "features": {
+            "heading": "Mengapa Memilih Kami?",
+            "description": "Kami memberikan yang terbaik untuk memastikan kesuksesan Anda.",
+            "cards": {
+                "programStudy": "Pilihan Program Studi",
+                "alumni": "Alumni telah Bekerja",
+                "lecturers": "Dosen Tersertifikasi",
+                "prestasi": "Prestasi Dosen dan Mahasiswa"
+            }
+        },
+        "achievements": {
+            "heading": "Prestasi Kami"
+        },
+        "testimonials": {
+            "heading": "Apa Kata Mereka"
+        }
+    },
+    "auth": {
+        "signin": {
+            "title": "Masuk",
+            "username": "Nama Pengguna",
+            "password": "Kata Sandi",
+            "captcha": "Masukkan Captcha",
+            "forgot_password": "Lupa kata sandi?",
+            "signin_button": "Masuk",
+            "loading": "Memuat...",
+            "description": "Silakan masuk untuk melanjutkan.",
+            "instructions": "Mahasiswa baru/aktif, gunakan NIM sebagai username dan tanggal lahir (yyyymmdd) @ 4 digit terakhir nomor handphone di Siakad sebagai kata sandi. Pastikan semua data di Siakad telah lengkap. Contoh penulisan kata sandi 19901127@2904.",
+            "back_to_home": "Kembali ke Beranda"
+        }
+    }
+}

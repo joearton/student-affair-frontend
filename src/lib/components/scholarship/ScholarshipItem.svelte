@@ -8,14 +8,14 @@
     }
 </script>
 
-<div class="card shadow-sm border-0 m-4">
-    <div class="card-header border-0 d-flex justify-content-between align-items-center">
+<div class="p-3">
+    <div class="border-0 d-flex justify-content-between align-items-center">
         <h5 class="mb-0">
             <a
                 href="{sch_plink}/{slugify(scholarship.name)}---{scholarship.code}"
                 class:text-success={scholarship.eligible.status === true}
                 class:fw-bold={scholarship.eligible.status === true}
-                class:text-muted={scholarship.status === "closed" || scholarship.eligible.status === false}
+                class:text-primary={scholarship.status === "closed" || scholarship.eligible.status === false}
             >
                 {scholarship.name}
             </a>
@@ -41,7 +41,7 @@
             </span>
         </div>
     </div>
-    <div class="card-body">
+    <div class="py-1">
         <p class="small text-muted">
             {scholarship.sch_excerpt}
         </p>
