@@ -41,7 +41,7 @@
                 {#if $user.username}
                     <i class='fa fa-user'></i> {$user.fullname}!
                 {:else}
-                    <i class='fa fa-user'></i> {$_('akun')}
+                    <i class='fa fa-user'></i> {$_('blog.topbar.account')}
                 {/if}
             </a>
         </div>    

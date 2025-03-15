@@ -1,5 +1,6 @@
 <script lang="ts">
     import MyScholarshipInfo from "./MyScholarshipInfo.svelte";
+    import { _ } from "svelte-i18n";
     const { sch_application } = $props();
 </script>
 
@@ -28,13 +29,13 @@
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
                         <div class="p-3 border rounded">
-                            <small class="text-muted">Father's Occupation</small>
+                            <small class="text-muted">{$_('account.myscholarship.father_occupation')}</small>
                             <div><span class="badge bg-primary">{sch_application.father_occupation_display}</span></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="p-3 border rounded">
-                            <small class="text-muted">Father's Monthly Income</small>
+                            <small class="text-muted">{$_('account.myscholarship.father_income')}</small>
                             <div><span class="badge bg-success">{sch_application.father_income_display}</span></div>
                         </div>
                     </div>
@@ -43,27 +44,27 @@
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
                         <div class="p-3 border rounded">
-                            <small class="text-muted">Mother's Occupation</small>
+                            <small class="text-muted">{$_('account.myscholarship.mother_occupation')}</small>
                             <div><span class="badge bg-primary">{sch_application.mother_occupation_display}</span></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="p-3 border rounded">
-                            <small class="text-muted">Mother's Monthly Income</small>
+                            <small class="text-muted">{$_('account.myscholarship.mother_income')}</small>
                             <div><span class="badge bg-success">{sch_application.mother_income_display}</span></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="mb-3 p-3 border rounded">
-                    <small class="text-muted">Description</small>
+                    <small class="text-muted">{$_('account.myscholarship.self_description')}</small>
                     <div class="mt-2" style="max-height: 300px; overflow-y: auto;">
                         {@html sch_application.self_description || "-"}
                     </div>
                 </div>
 
                 <div class="mb-3 p-3 border rounded">
-                    <small class="text-muted">Motivation</small>
+                    <small class="text-muted">{$_('account.myscholarship.motivation')}</small>
                     <div class="mt-2" style="max-height: 300px; overflow-y: auto;">
                         {@html sch_application.motivation || "-"}
                     </div>
@@ -75,17 +76,17 @@
                     <div class="bg-light py-3 px-3 mb-3 rounded shadow-sm">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="fw-bold text-info">{item.attachment.name}</span>
+                            {#if item.valid}
+                                <span class="text-success"><i class="fa fa-check-circle"></i></span>
+                            {:else}
+                                <span class="text-danger"><i class="fa fa-times-circle"></i></span>
+                            {/if}
                         </div>
-                        <small class="text-muted d-block mb-2">{item.attachment.description}</small>
-                        <a
-                            id="file-phd-{item.id}"
-                            href={item.file}
-                            target="_blank"
-                            title="{item.attachment.name}"
-                            class="btn btn-outline-success {item.file ? '' : 'd-none'}"
-                        >
-                            <i class="fa fa-download"></i> {item.attachment.name}
-                        </a>
+                        <div>
+                            <a id="file-phd-{item.id}" href={item.file} target="_blank" class="btn btn-outline-success {item.file ? '' : 'd-none'}">
+                                <i class="fa fa-download"></i> {item.attachment.name}
+                            </a>    
+                        </div>
                     </div>
                 {/each}
             </div>

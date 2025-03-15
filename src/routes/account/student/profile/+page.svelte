@@ -3,6 +3,7 @@
     import { check_authentication } from "$lib/auth";
     import { addMessage } from "$lib/stores/messages";
     import type { LayoutData } from "./$types";
+    import { _ } from 'svelte-i18n';
 
     const { data }: { data: LayoutData} = $props();
     
@@ -40,16 +41,16 @@
     <div class="profile-header text-center mb-3 border-bottom px-3 py-4">
         <div class="profile-picture-container position-relative d-flex flex-column align-items-center">
             {#if user_picture_url }
-                <img src={data.preference.site + user_picture_url} class="user-picture" alt="User Profile" />
+                <img src={data.preference.site + user_picture_url} class="user-picture" alt={$_('account.profile.change_picture')} />
             {:else}
-                <img src='/media/user.png' class="user-picture" alt="User Profile" />
+                <img src='/media/user.png' class="user-picture" alt={$_('account.profile.change_picture')} />
             {/if}
             <div class="mt-2 d-flex justify-content-center">
-                <label class="btn btn-outline-primary btn-sm">
+                <label class="btn btn-light btn-sm">
                     {#if user_picture_url}
-                        <i class="fa fa-upload"></i> Change Picture
+                        <i class="fa fa-upload"></i> {$_('account.profile.change_picture')}
                     {:else}
-                        <i class="fa fa-upload"></i> Upload Picture
+                        <i class="fa fa-upload"></i> {$_('account.profile.upload_picture')}
                     {/if}
                     <input type="file" accept="image/*" onchange="{handleFileUpload}" class="d-none" />
                 </label>
@@ -60,60 +61,60 @@
     <!-- Bio -->
     <div class="profile-bio px-4 py-3">        
         <!-- Student Details -->
-        <h5 class="card-title fw-bold mb-3">Student Details</h5>
+        <h5 class="card-title fw-bold mb-3">{$_('account.profile.student_details')}</h5>
         <div class="row">
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Fullname</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.fullname')}</p>
                 <p>{data.user.fullname}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Student ID</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.student_id')}</p>
                 <p>{data.user.student.student_id}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Department</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.department')}</p>
                 <p>{data.user.student.department_name}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Status</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.status')}</p>
                 <p>{data.user.student.status_display}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Period</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.period')}</p>
                 <p>{data.user.student.reg_period}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Religion</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.religion')}</p>
                 <p>{data.user.student.religion_display}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Place of Birth</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.place_of_birth')}</p>
                 <p>{data.user.student.place_birth}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Date of Birth</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.date_of_birth')}</p>
                 <p>{data.user.student.date_birth}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Address</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.address')}</p>
                 <p>{data.user.student.address}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Postal Code</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.postal_code')}</p>
                 <p>{data.user.student.postal_code}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Mobile Number</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.mobile_number')}</p>
                 <p>{data.user.student.mobile_number}</p>
             </div>
             <div class="col-md-6 mb-2">
-                <p class="mb-1 fw-bold">Faculty</p>
+                <p class="mb-1 fw-bold">{$_('account.profile.faculty')}</p>
                 <p>{data.user.student.faculty_name}</p>
             </div>
         </div>
         <div class="text-center my-5">
             <button class="btn btn-outline-primary" onclick="{update_from_siakad}">
-                <i class="fa fa-refresh"></i> Update From Siakad
+                <i class="fa fa-refresh"></i> {$_('account.profile.update_from_siakad')}
             </button>
         </div>
     </div>

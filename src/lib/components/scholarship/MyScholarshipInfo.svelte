@@ -1,45 +1,54 @@
 <script lang="ts">
     import { format_publication_date, slugify } from "$lib/utils";
+    import { _ } from "svelte-i18n";
+    import { PUBLIC_BASE_URL } from "$env/static/public";
     const { sch_application } = $props();
 </script>
 
 
 <div class="list-unstyled mb-0">
-    <div class="row mb-1">
-        <div class="col-md-3 text-muted">Scholarship Name:</div>
+    <div class="row mb-2">
+        <div class="col-md-3 text-muted">{$_('account.myscholarship.scholarship_name')}:</div>
         <div class="col-md-9 fw-bold">
             <a href="/account/student/scholarship/{slugify(sch_application.scholarship.name)}---{sch_application.scholarship.code}">{sch_application.scholarship.name}</a>                            
         </div>
     </div>
-    <div class="row mb-1">
-        <div class="col-md-3 text-muted">Targets:</div>
+    <div class="row mb-2">
+        <div class="col-md-3 text-muted">{$_('account.myscholarship.targets')}:</div>
         <div class="col-md-9">{sch_application.scholarship.targets.map((target: { name: string }) => target.name).join(", ")}</div>
     </div>
-    <div class="row mb-1">
-        <div class="col-md-3 text-muted">Deadline:</div>
-        <div class="col-md-9 text-danger">
-            {format_publication_date(sch_application.scholarship.end_date)} ({sch_application.scholarship.days_remaining} days remaining)
+    <div class="row mb-2">
+        <div class="col-md-3 text-muted">{$_('account.myscholarship.deadline')}:</div>
+        <div class="col-md-9">
+            {format_publication_date(sch_application.scholarship.end_date)} ({sch_application.scholarship.days_remaining} {$_('account.myscholarship.days_remaining')})
         </div>
     </div>
-    <div class="row mb-1">
-        <div class="col-md-3 text-muted">Status:</div>
+    {#if sch_application.status !== 'DRAFT'}
+        <div class="row mb-2">
+            <div class="col-md-3 text-muted">{$_('account.myscholarship.card')}:</div>
+            <div class="col-md-9">
+                <a href="{PUBLIC_BASE_URL}download/application/{sch_application.code}/">
+                    <i class="fa fa-download"></i> {$_('account.myscholarship.download')}
+                </a>    
+            </div>
+        </div>
+    {/if}
+
+    <div class="row mb-2">
+        <div class="col-md-3 text-muted">{$_('account.myscholarship.status')}:</div>
         <div class="col-md-9">
             <div class='mb-2'>
                 <span class="badge {sch_application.status === 'ACCEPTED' ? 'bg-success' : sch_application.status === 'REJECTED' ? 'bg-danger' : 'bg-info'}">
                     {sch_application.status}
-                </span>    
+                </span>
             </div>
             {#if sch_application.status === 'ACCEPTED'}
                 <div class="alert alert-success" role="alert">
-                    <strong>Congratulations!</strong> Your scholarship application has been accepted.
+                    <strong>{$_('account.myscholarship.congratulations')}</strong> {$_('account.myscholarship.accepted_message')}
                 </div>
             {:else if sch_application.status === 'REJECTED'}
                 <div class="alert alert-danger" role="alert">
-                    <strong>We're sorry!</strong> Your scholarship application has been rejected.
-                </div>
-            {:else}
-                <div class="alert alert-info" role="alert">
-                    Your scholarship application is currently being reviewed.
+                    <strong>{$_('account.myscholarship.sorry')}</strong> {$_('account.myscholarship.rejected_message')}
                 </div>
             {/if}
         </div>
@@ -48,16 +57,29 @@
 
 {#if sch_application.tests && sch_application.tests.length > 0}
     <div class="my-4 py-3 border-top">
-        <h5 class="text-primary mb-3">Tests</h5>
         {#each sch_application.tests as test}
-            <div class="card shadow-sm mb-3">
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">{$_('account.myscholarship.test_date')}: {new Date(test.test_datetime).toLocaleString()}</h6>
+                </div>
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Test Date: {new Date(test.test_datetime).toLocaleString()}</h6>
-                    <p class="mb-1"><strong>Test URL:</strong> <a href="{test.test_url}" target="_blank">{test.test_url}</a></p>
-                    <p class="mb-1"><strong>Username:</strong> {test.test_username}</p>
-                    <p class="mb-1"><strong>Password:</strong> {test.test_password}</p>
+                    <div class="row mb-1">
+                        <div class="col-md-3"><strong>{$_('account.myscholarship.test_url')}:</strong></div>
+                        <div class="col-md-9"><a href="{test.test_url}" target="_blank">{test.test_url}</a></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-md-3"><strong>{$_('account.myscholarship.username')}:</strong></div>
+                        <div class="col-md-9">{test.test_username}</div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-md-3"><strong>{$_('account.myscholarship.password')}:</strong></div>
+                        <div class="col-md-9">{test.test_password}</div>
+                    </div>
                     {#if test.test_score}
-                        <p class="mb-1 text-success"><strong>Score:</strong> {test.test_score}</p>
+                        <div class="row mb-1">
+                            <div class="col-md-3 text-success"><strong>{$_('account.myscholarship.score')}:</strong></div>
+                            <div class="col-md-9 text-success">{test.test_score}</div>
+                        </div>
                     {/if}
                 </div>
             </div>
@@ -67,8 +89,8 @@
 
 {#if sch_application.note && sch_application.note.length > 5}
     <div class="py-3 my-3 border-top">
-        <div class="text-muted">Note from Committee:</div>
-        <div class="alert alert-info" role="alert">
+        <p class="fw-bold mb-0">{$_('account.myscholarship.note_from_committee')}:</p>
+        <div class="border p-3">
             {@html sch_application.note}
         </div>
     </div>

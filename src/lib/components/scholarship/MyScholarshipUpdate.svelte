@@ -6,8 +6,9 @@
 
     import EasyMDE from "easymde";
     import "easymde/dist/easymde.min.css";
-    import { redirect } from "@sveltejs/kit";
     import { goto } from "$app/navigation";
+    import { translate } from "$lib/translator";
+    import { _ } from "svelte-i18n";
 
     const { sch_application } = $props();
 
@@ -15,29 +16,29 @@
     let motivationEditor: EasyMDE;
 
     const occupations = [
-        { value: "unemployed", label: "Unemployed" },
-        { value: "self_employed", label: "Self Employed" },
-        { value: "government_employee", label: "Government Employee" },
-        { value: "private_sector", label: "Private Sector" },
-        { value: "retired", label: "Retired" },
-        { value: "farmer", label: "Farmer" },
-        { value: "teacher", label: "Teacher" },
-        { value: "doctor", label: "Doctor" },
-        { value: "engineer", label: "Engineer" },
-        { value: "lawyer", label: "Lawyer" },
-        { value: "nurse", label: "Nurse" },
-        { value: "police_officer", label: "Police Officer" },
-        { value: "military", label: "Military" },
-        { value: "artist", label: "Artist" },
-        { value: "scientist", label: "Scientist" },
-        { value: "other", label: "Other" }
+        { value: "self_employed", label: translate("account.myscholarship.occupations.self_employed") },
+        { value: "government_employee", label: translate("account.myscholarship.occupations.government_employee") },
+        { value: "private_sector", label: translate("account.myscholarship.occupations.private_sector") },
+        { value: "retired", label: translate("account.myscholarship.occupations.retired") },
+        { value: "farmer", label: translate("account.myscholarship.occupations.farmer") },
+        { value: "teacher", label: translate("account.myscholarship.occupations.teacher") },
+        { value: "doctor", label: translate("account.myscholarship.occupations.doctor") },
+        { value: "engineer", label: translate("account.myscholarship.occupations.engineer") },
+        { value: "lawyer", label: translate("account.myscholarship.occupations.lawyer") },
+        { value: "nurse", label: translate("account.myscholarship.occupations.nurse") },
+        { value: "police_officer", label: translate("account.myscholarship.occupations.police_officer") },
+        { value: "military", label: translate("account.myscholarship.occupations.military") },
+        { value: "artist", label: translate("account.myscholarship.occupations.artist") },
+        { value: "scientist", label: translate("account.myscholarship.occupations.scientist") },
+        { value: "unemployed", label: translate("account.myscholarship.occupations.unemployed") },
+        { value: "other", label: translate("account.myscholarship.occupations.other") }
     ];
     const incomes = [
-        { value: "below_1m", label: "Below 1,000,000 IDR" },
-        { value: "1m_3m", label: "1,000,000 - 3,000,000 IDR" },
-        { value: "3m_5m", label: "3,000,000 - 5,000,000 IDR" },
-        { value: "5m_10m", label: "5,000,000 - 10,000,000 IDR" },
-        { value: "above_10m", label: "Above 10,000,000 IDR" }
+        { value: "below_1m", label: translate("account.myscholarship.incomes.below_1m") },
+        { value: "1m_3m", label: translate("account.myscholarship.incomes.1m_3m") },
+        { value: "3m_5m", label: translate("account.myscholarship.incomes.3m_5m") },
+        { value: "5m_10m", label: translate("account.myscholarship.incomes.5m_10m") },
+        { value: "above_10m", label: translate("account.myscholarship.incomes.above_10m") }
     ];
 
     let sch_application_agreement = $state(sch_application.status !== "DRAFT");
@@ -207,7 +208,7 @@
                 <form class="border p-4 rounded bg-light">
                     <div class="row mb-4">
                         <div class="col-md-6 mb-4 mb-md-0">
-                            <label for="father_occupation" class="form-label fw-semibold">Pekerjaan Ayah:</label>
+                            <label for="father_occupation" class="form-label fw-semibold">{$_('account.myscholarship.father_occupation')}:</label>
                             <select id="father_occupation" class="form-select" bind:value={form_data.father_occupation} onchange={update_sch_application}>
                                 {#each occupations as occupation}
                                     <option value={occupation.value} selected={occupation.value === form_data.father_occupation}>{occupation.label}</option>
@@ -215,7 +216,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="mother_occupation" class="form-label fw-semibold">Pekerjaan Ibu:</label>
+                            <label for="mother_occupation" class="form-label fw-semibold">{$_('account.myscholarship.mother_occupation')}:</label>
                             <select id="mother_occupation" class="form-select" bind:value={form_data.mother_occupation} onchange={update_sch_application}>
                                 {#each occupations as occupation}
                                     <option value={occupation.value} selected={occupation.value === form_data.mother_occupation}>{occupation.label}</option>
@@ -226,7 +227,7 @@
 
                     <div class="row mb-4">
                         <div class="col-md-6 mb-4 mb-md-0">
-                            <label for="father_income" class="form-label fw-semibold">Pendapatan Bulanan Ayah:</label>
+                            <label for="father_income" class="form-label fw-semibold">{$_('account.myscholarship.father_income')}:</label>
                             <select id="father_income" class="form-select" bind:value={form_data.father_income} onchange={update_sch_application}>
                                 {#each incomes as income}
                                     <option value={income.value} selected={income.value === form_data.father_income}>{income.label}</option>
@@ -234,7 +235,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="mother_income" class="form-label fw-semibold">Pendapatan Bulanan Ibu:</label>
+                            <label for="mother_income" class="form-label fw-semibold">{$_('account.myscholarship.mother_income')}:</label>
                             <select id="mother_income" class="form-select" bind:value={form_data.mother_income} onchange={update_sch_application}>
                                 {#each incomes as income}
                                     <option value={income.value} selected={income.value === form_data.mother_income}>{income.label}</option>
@@ -244,11 +245,11 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="self_description" class="form-label fw-semibold">Deskripsi Diri:</label>
+                        <label for="self_description" class="form-label fw-semibold">{$_('account.myscholarship.self_description')}:</label>
                         <textarea id="self_description" class="form-control" rows="4"></textarea>
                     </div>
                     <div class="mb-4">
-                        <label for="motivation" class="form-label fw-semibold">Motivasi:</label>
+                        <label for="motivation" class="form-label fw-semibold">{$_('account.myscholarship.motivation')}:</label>
                         <textarea id="motivation" class="form-control" rows="4"></textarea>
                     </div>
                 </form>
@@ -263,7 +264,7 @@
                                 {item.attachment.extensions} (Max: {item.attachment.max_size} KB)
                             </span>
                         </div>
-                        <div class="small text-muted mb-2">{item.attachment.description}</div>
+                        <div class="small text-muted mb-2">{@html item.attachment.description}</div>
 
                         <a id="file-phd-{item.id}" href={item.file} target="_blank" title="{item.attachment.name}" class="btn file-phd btn-success btn-sm {item.file ? '' : 'd-none'}">
                             <i class="fa fa-check"></i> Lihat {item.attachment.name}
@@ -271,7 +272,7 @@
 
                         <input type="file" class="form-control mt-2" accept={item.attachment.extensions} onchange={event => uploadFile(event, item.id)} />
                         <div class="mt-3">
-                            <label for="attachment-url-{item.attachment.id}" class="form-label mb-0 fw-semibold">Atau URL:</label>
+                            <label for="attachment-url-{item.attachment.id}" class="form-label mb-0 fw-semibold">{$_('account.myscholarship.or_url')}:</label>
                             <input type="url" id="attachment-url-{item.attachment.id}" class="form-control" placeholder="https://drive.google.com/..." />
                         </div>
                     </div>
@@ -280,18 +281,18 @@
 
             <div class="tab-pane fade" id="submit" role="tabpanel" aria-labelledby="submit-tab">
                 <div class="alert alert-warning my-3" role="alert">
-                    Harap pastikan semua informasi sudah benar. <br />
-                    <b>Setelah diajukan, data tidak dapat diubah.</b>
+                    {$_('account.myscholarship.submit_warning')}
                 </div>
                 <div id="application-agreement" class="form-check mb-3 d-none">
                     <input class="form-check-input" type="checkbox" id="agree" bind:checked={sch_application_agreement}>
                     <label class="form-check-label" for="agree">
-                        Saya menyetujui semua informasi yang diberikan benar.
+                        {$_('account.myscholarship.agree_terms')}
                     </label>
                 </div>
                 <div class="my-5 text-center">
                     <button type="button" class="btn btn-outline-primary fw-semibold px-4" onclick="{submit_sch_application}">
-                        <i class="fa fa-paper-plane"></i> Ajukan Beasiswa
+                        <i class="fa fa-paper-plane"></i>
+                        {$_('account.myscholarship.submit_button')}
                     </button>
                 </div>
             </div>

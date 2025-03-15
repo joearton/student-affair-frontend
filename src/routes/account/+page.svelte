@@ -11,9 +11,9 @@
 <div class="d-flex align-items-center mb-4 border-bottom px-4 py-3">
     <div class="profile-icon">
         {#if data.user.picture}
-            <img src="{data.preference.site + data.user.picture}" alt="{ data.user.fullname }" class="user-picture" />
+            <div class="user-picture" style="background: url('{data.preference.site + data.user.picture}') center center; background-size: cover;"></div>
         {:else}
-            <img src="/media/user.png" alt="{ data.user.fullname }" class="user-picture" />
+            <div class="user-picture" style="background-image: url('/media/user.png');"></div>
         {/if}
     </div>
     <div class="ms-3">

@@ -29,7 +29,12 @@
                 backdrop[0].remove();
             }
         }
-        goto(`/account/student/scholarship/apply/${scholarship.code}/`);
+        
+        if ($user.authenticated) {
+            goto(`/account/student/scholarship/apply/${scholarship.code}/`);
+        } else {
+            goto(`/auth/signin?scholarship=${scholarship.code}`);
+        }
     }
 </script>
 

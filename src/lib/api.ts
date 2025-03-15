@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { refresh_token } from './auth';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { PUBLIC_BASE_URL } from '$env/static/public';
 
 export const baseURL = PUBLIC_BASE_URL;
 const api = axios.create({
     baseURL: baseURL,
+    timeout: 10000
 });
 
 
@@ -19,6 +20,20 @@ if (typeof window !== 'undefined') {
         return config;
     });
 }
+
+
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response) {
+            console.error("API Error:", error.response.status, error.response.data);
+        } else {
+            console.error("Network Error:", error.message);
+        }
+        return Promise.reject(error);
+    }
+);
 
 
 export const api_request = async (endpoint: string, method: string = 'GET', data: any = null, as_data: boolean = true) => {
@@ -38,8 +53,8 @@ export const api_request = async (endpoint: string, method: string = 'GET', data
         }
     } catch (err) {
         if (axios.isAxiosError(err)) {
-            if (err.response?.status === 401) {
-                console.error('Unauthorized request. Attempting to refresh token.');
+            if (err.response?.status === 401 || err.response?.status === 403) {
+                console.debug('Unauthorized request. Attempting to refresh token.');
                 const token_refreshed = await refresh_token();
                 if (token_refreshed) {
                     // Retry the original request
@@ -57,7 +72,7 @@ export const api_request = async (endpoint: string, method: string = 'GET', data
                         return retry_response;
                     }
                 } else {
-                    console.error('Token refresh failed. Please log in again.');
+                    console.debug('Token refresh failed. Please log in again.');
                     redirect(307, '/auth/signin');
                 }
             } else {

@@ -5,6 +5,8 @@
     import { api_request } from '$lib/api';
     import { onMount } from 'svelte';
     import { _ } from 'svelte-i18n';
+    import { page } from '$app/state';
+    import { check_authentication } from '$lib/auth';
 
     let { data }: { data: LayoutData } = $props();
 
@@ -14,6 +16,13 @@
     let captcha = $state('');
     let captcha_key = $state('');
     let captcha_image = $state('');
+
+    let next_scholarship = page.url.searchParams.get('scholarship') || "";
+    let is_authenticated = $state(false);
+
+    onMount(async () => {
+        is_authenticated = await check_authentication();
+    });
 
     const load_captcha = async () => {
         const response = await api_request('/captcha/image/');
@@ -29,9 +38,12 @@
 
         try {
             const state = await signin(username, password, captcha, captcha_key);
-            console.log(state);
             if (state === true) {
-                goto('/auth/validate');
+                if (next_scholarship) {
+                    goto('/auth/validate?scholarship=' + next_scholarship);
+                } else {
+                    goto('/auth/validate');
+                }
             } else {
                 load_captcha();
             }
@@ -62,26 +74,33 @@
 
             <!-- Right Section with Form -->
             <div class="col-md-5 bg-white">
-                <div class="card-body px-4 py-5">
+                <div class="card-body px-4 py-4">
                     <h2 class="text-center mb-4">{$_('auth.signin.title')}</h2>
-                    
+                    {#if is_authenticated}
+                        <div class="alert alert-success" role="alert">
+                            {$_('auth.signin.already_authenticated')}
+                            <div class="my-1 text-center">
+                                <a href="/account/" class="btn btn-success">{$_('auth.signin.title')}</a>
+                            </div>
+                        </div>
+                    {/if}
                     <form onsubmit={handleLogin}>
-                        <div class="mb-3">
-                            <label for="username" class="form-label">{$_('auth.signin.username')}</label>
-                            <input type="text" id="username" class="form-control" bind:value={username} placeholder="{$_('auth.signin.username')}" required>
+                        <div class="mb-2 input-group">
+                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                            <input type="text" id="username" class="form-control" bind:value={username} placeholder="{$_('auth.signin.username')}" required />
                         </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">{$_('auth.signin.password')}</label>
-                            <input type="password" id="password" class="form-control" bind:value={password} placeholder="{$_('auth.signin.password')}" required>
+                        <div class="mb-2 input-group">
+                            <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                            <input type="password" id="password" class="form-control" bind:value={password} placeholder="{$_('auth.signin.password')}" required />
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <img class="border my-2" src={captcha_image} alt="Captcha" />
                             <input type="text" id="captcha" bind:value={captcha} class="form-control" placeholder="{$_('auth.signin.captcha')}" required />
                         </div>
                         
-                        <div class="mb-3 text-center">
+                        <div class="mb-2 text-center">
                             <a href="/auth/reset-password" class="text-info">{$_('auth.signin.forgot_password')}</a>
                         </div>
 

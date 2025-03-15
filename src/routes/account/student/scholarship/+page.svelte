@@ -8,6 +8,7 @@
     import NoDataAvailable from '$lib/components/NoDataAvailable.svelte';
     import SimplePreloader from '$lib/components/SimplePreloader.svelte';
     import ScholarshipItem from '$lib/components/scholarship/ScholarshipItem.svelte';
+    import { _ } from 'svelte-i18n';
 
     let response = $state({results: [], previous: '', next: '', count: 0, limit: 10, offset: 0});  
     let filter_query = $state('');
@@ -58,7 +59,7 @@
 
 <div class="pt-1 pb-3">
     <h5 class="fw-bold px-4 py-3 mb-3 border-bottom">
-        Daftar Beasiswa
+        {$_('scholarship.scholarship_list')}
         {#if is_loading}<SimplePreloader></SimplePreloader>{/if}
     </h5>
       
@@ -81,7 +82,7 @@
         {/if}
 
         {#each scholarships as scholarship}
-            <div class="border-bottom my-3">
+            <div class="border-bottom m-3">
                 <ScholarshipItem {scholarship} {sch_referer}></ScholarshipItem>
             </div>
         {/each}

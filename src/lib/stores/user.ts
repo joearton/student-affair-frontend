@@ -20,6 +20,7 @@ interface User {
 }
 
 export const user = writable<User>({
+    authenticated: false,
     fullname: '',
     username: '',
     email: '',
