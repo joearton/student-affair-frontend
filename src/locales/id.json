@@ -45,11 +45,28 @@
             "loading": "Memuat...",
             "description": "Silakan masuk untuk melanjutkan.",
             "instructions": "Mahasiswa baru/aktif, gunakan NIM sebagai username dan tanggal lahir (yyyymmdd) @ 4 digit terakhir nomor handphone di Siakad sebagai kata sandi. Pastikan semua data di Siakad telah lengkap. Contoh penulisan kata sandi 19901127@2904.",
-            "back_to_home": "Kembali ke Beranda"
+            "back_to_home": "Kembali ke Beranda",
+            "already_authenticated": "Anda sudah masuk. Silakan klik tombol di bawah ini"
         }
     },
     "scholarship": {
-        "scholarship_list": "Daftar Beasiswa"
+        "scholarship_list": "Daftar Beasiswa",
+        "application_heading": "Pendaftaran Beasiswa",
+        "already_applied": "Anda sudah mendaftar beasiswa ini.",
+        "check_status": "Pergi ke MyScholarship untuk melihat status pendaftaran.",
+        "already_applied_period": "Anda sudah mendaftar beasiswa di periode ini.",
+        "eligible_info": "Beasiswa ini tersedia untuk Anda. Silakan daftar di sini!",
+        "apply_now": "Daftar Sekarang",
+        "not_eligible": "Anda tidak memenuhi syarat untuk mendaftar beasiswa ini.",
+        "table": {
+            "no": "No",
+            "scope": "Ruang Lingkup",
+            "reason": "Alasan",
+            "status": "Status"
+        },
+        "open_now": "Beasiswa sedang dibuka!",
+        "coming_soon": "Beasiswa akan segera dibuka pada {start_date}. Nantikan!",
+        "closed": "Beasiswa saat ini sudah ditutup."
     },
     "account": {
         "myscholarship": {

@@ -3,6 +3,8 @@
     import { user } from "$lib/stores/user"
     import { goto } from '$app/navigation';
     import type { Department, Faculty } from '$lib/types/scholarship_university';
+    import { _ } from "svelte-i18n";
+
     
     const { scholarship, faculties, departments, reading_time, mini_mode } = $props();
 
@@ -170,40 +172,53 @@
                     </div>
                 </div>
             </div>
-            <h3>Scholarship Application</h3>
+            <h3>{$_('scholarship.application_heading')}</h3>
             {#if scholarship.status === 'on-going'}
                 {#if $user.authenticated === true}
                     {#if scholarship.eligible.status === true}
-                        {#if $user.applications && $user.applications.some((application: { scholarship_code: string }) => application.scholarship_code === scholarship.code)}
+                        {#if $user.applications && $user.applications.some((application) => application.scholarship_code === scholarship.code)}
                             <div class="alert alert-info">
-                                You have already applied for this scholarship.
-                                Go to <a class="fw-bold" href="/account/student/myscholarship/">MyScholarship</a> to check the status.
+                                {$_('scholarship.already_applied')}
+                                {$_('scholarship.check_status')}
+                                <a class="fw-bold" href="/account/student/myscholarship/">MyScholarship</a>
+                            </div>
+                        <!--Ketika user sudah mendaftar-->
+                        {:else if $user.applications && $user.applications.some((application) => application.multi_applications === false)}
+                            <div class="alert alert-info">
+                                <div>{$_('scholarship.already_applied_period')}</div>
+                                <ol>                                    
+                                    {#each $user.applications as app}
+                                        <li>{app.period_name}: {app.scholarship_name}</li>
+                                    {/each}
+                                </ol>
                             </div>
                         {:else}
-                            <div class="alert alert-success">Scholarship is eligible for you. You can apply here!</div>
+                            <div class="alert alert-success">{$_('scholarship.eligible_info')}</div>
                             <div class="d-flex justify-content-center py-3">
-                                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#applyModal">Apply Now</button>
+                                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#applyModal">
+                                    {$_('scholarship.apply_now')}
+                                </button>
                             </div>
                         {/if}
                     {:else}
-                        <div class="alert alert-danger">You are not eligible to apply for this scholarship.</div>
+                        <div class="alert alert-danger">{$_('scholarship.not_eligible')}</div>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Scope</th>
-                                    <th>Reason</th>
-                                    <th>Status</th>
+                                    <th>{$_('scholarship.table.no')}</th>
+                                    <th>{$_('scholarship.table.scope')}</th>
+                                    <th>{$_('scholarship.table.reason')}</th>
+                                    <th>{$_('scholarship.table.status')}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {#each scholarship.eligible && Object.entries(scholarship.eligible.scopes) as [key, value]: [string, { reason: string }], index}
+                                {#each scholarship.eligible && Object.entries(scholarship.eligible.scopes) as [key, value], index}
                                     <tr>
                                         <td>{index + 1}</td>
                                         <td>{key}</td>
-                                        <td>{(value as { reason: string }).reason}</td>
+                                        <td>{value.reason}</td>
                                         <td>
-                                            <i class="fas {(value as { status: boolean }).status ? 'fa-check text-white bg-success' : 'fa-remove text-white bg-danger'} p-1 rounded"></i>
+                                            <i class="fas {value.status ? 'fa-check text-white bg-success' : 'fa-remove text-white bg-danger'} p-1 rounded"></i>
                                         </td>
                                     </tr>
                                 {/each}
@@ -211,17 +226,20 @@
                         </table>
                     {/if}
                 {:else}
-                    <div class="alert alert-success">Scholarship is open now!</div>
+                    <div class="alert alert-success">{$_('scholarship.open_now')}</div>
                     <div class="d-flex justify-content-center py-3">
-                        <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#applyModal">Apply Now</button>
+                        <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#applyModal">
+                            {$_('scholarship.apply_now')}
+                        </button>
                     </div>
                 {/if}
             {:else if scholarship.status === 'coming-soon'}
                 <div class="alert alert-warning">
-                    Scholarship is coming soon and will be open on <b>{format_publication_date(scholarship.start_date, "MMMM dd, yyyy 'at' HH:mm")}</b>. Stay tuned!
+                    {$_('scholarship.coming_soon')}
+                    {format_publication_date(scholarship.start_date, "MMMM dd, yyyy 'at' HH:mm")}
                 </div>
             {:else if scholarship.status === 'closed'}
-                <div class="alert alert-danger">Scholarship is currently closed.</div>
+                <div class="alert alert-danger">{$_('scholarship.closed')}</div>
             {/if}
         </div>
     </div>

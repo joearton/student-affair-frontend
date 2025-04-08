@@ -50,7 +50,23 @@
         }
     },
     "scholarship": {
-        "scholarship_list": "Scholarship List"
+        "scholarship_list": "Scholarship List",
+        "application_heading": "Scholarship Application",
+        "already_applied": "You have already applied for this scholarship.",
+        "check_status": "Go to MyScholarship to check the status.",
+        "already_applied_period": "You have already applied scholarship in this periods.",
+        "eligible_info": "Scholarship is eligible for you. You can apply here!",
+        "apply_now": "Apply Now",
+        "not_eligible": "You are not eligible to apply for this scholarship.",
+        "table": {
+          "no": "No",
+          "scope": "Scope",
+          "reason": "Reason",
+          "status": "Status"
+        },
+        "open_now": "Scholarship is open now!",
+        "coming_soon": "Scholarship is coming soon and will be open on {start_date}. Stay tuned!",
+        "closed": "Scholarship is currently closed."        
     },
     "account": {
         "myscholarship": {
