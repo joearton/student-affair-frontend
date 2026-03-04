@@ -254,7 +254,7 @@
                 <NoDataAvailable></NoDataAvailable>
             {/if}
         {/if}
-        {#each scholarships as scholarship}
+        {#each scholarships.filter(s => s.status !== 'closed') as scholarship}
             <div class="sch-item d-block bg-white border-0 shadow-sm my-5" style="border-radius: 0;">
                 <div class="row g-0">
                     <div class="col-md-3">
