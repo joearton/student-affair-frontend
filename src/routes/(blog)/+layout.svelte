@@ -24,6 +24,38 @@
       });
     }
 
+    // GSAP preloader dismiss animation
+    const gsap = (window as any).gsap;
+    const preloader = document.getElementById("preloader");
+    if (gsap && preloader) {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          preloader.remove();
+        },
+      });
+      tl.to("#preloader-spinner", {
+        scale: 0,
+        opacity: 0,
+        duration: 0.4,
+        ease: "back.in(2)",
+      })
+        .to(
+          "#preloader-text",
+          { y: -20, opacity: 0, duration: 0.3, ease: "power2.in" },
+          "-=0.2",
+        )
+        .to(
+          "#preloader-subtext",
+          { y: -15, opacity: 0, duration: 0.3, ease: "power2.in" },
+          "-=0.2",
+        )
+        .to(preloader, {
+          yPercent: -100,
+          duration: 0.6,
+          ease: "power3.inOut",
+        });
+    }
+
     const handleScroll = () => {
       showScrollTop = window.scrollY > 300;
     };
