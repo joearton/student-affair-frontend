@@ -27,4 +27,5 @@ export interface Scholarship  {
     thumbnail: string;
     unit_names: string[];
     code: string;
+    period_name: string;
 };

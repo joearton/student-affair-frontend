@@ -37,7 +37,7 @@
                 </li>
                 <li>
                     <i class="fas fa-envelope me-2 text-warning"></i>
-                    <a href="mailto:info@umko.ac.id" class="text-white text-decoration-none">info@umko.ac.id</a>
+                    <a href="mailto:pmb@umko.ac.id" class="text-white text-decoration-none">pmb@umko.ac.id</a>
                 </li>
                 <li>
                     <i class="fas fa-globe me-2 text-warning"></i>

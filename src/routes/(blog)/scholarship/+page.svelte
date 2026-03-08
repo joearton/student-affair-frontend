@@ -32,7 +32,7 @@
   let filter_query = $state("");
   let filter_target = $state("");
   let filter_destination = $state("");
-  let filter_status = $state("");
+  let filter_status = $state(["on-going"]);
   let filter_level = $state("");
   let filter_source = $state("");
   let filter_faculty = $state("");
@@ -66,7 +66,7 @@
       is_loading = true;
       response_all = await get_scholarships({
         search: filter_query,
-        status: filter_status,
+        status: filter_status.join(","),
         source: filter_source,
         destination: filter_destination,
         targets: filter_target,
@@ -112,7 +112,12 @@
               style="background-image: url('{scholarship.thumbnail}'); background-size: cover; background-position: center; height: 275px;"
             ></div>
             <div class="card-body d-flex flex-column">
-              <h4 class="py-3 card-title fw-bold">{scholarship.name}</h4>
+              <h4 class="py-3 card-title fw-bold">
+                {scholarship.name}{#if scholarship.period_name}
+                  <span class="fw-normal text-muted" style="font-size: 0.75em;">
+                    - {scholarship.period_name}</span
+                  >{/if}
+              </h4>
               <p class="small">{scholarship.sch_excerpt}</p>
               <div class="row small">
                 <div class="col-md-4"><strong>Start Date</strong></div>

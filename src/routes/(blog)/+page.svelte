@@ -14,6 +14,40 @@
   let achievements: Achievement[] = $state([]);
   let testimonials: Testimonial[] = $state([]);
 
+  // Count-up animation state
+  const counterConfigs = [
+    { target: 11, prefix: "+", suffix: "" },
+    { target: 5000, prefix: "", suffix: "+" },
+    { target: 50, prefix: "", suffix: "+" },
+    { target: 100, prefix: "", suffix: "+" },
+  ];
+  let counterValues = $state([0, 0, 0, 0]);
+  let counters = $derived(
+    counterConfigs.map((c, i) => ({ ...c, current: counterValues[i] })),
+  );
+  let countersStarted = false;
+  let featuresSection: HTMLElement;
+
+  function animateCount(
+    index: number,
+    target: number,
+    duration: number = 2000,
+  ) {
+    const start = performance.now();
+    function step(timestamp: number) {
+      const progress = Math.min((timestamp - start) / duration, 1);
+      // easeOutExpo for smooth deceleration
+      const eased = 1 - Math.pow(1 - progress, 3);
+      counterValues[index] = Math.floor(eased * target);
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        counterValues[index] = target;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
   onMount(async () => {
     const response_post = await get_posts({ limit: 6 });
     posts = response_post.results || [];
@@ -23,6 +57,25 @@
 
     const response_testimonial = await get_testimonials(6);
     testimonials = response_testimonial.results;
+
+    // Observe features section for count-up animation
+    if (featuresSection) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && !countersStarted) {
+              countersStarted = true;
+              counters.forEach((c, i) => {
+                setTimeout(() => animateCount(i, c.target), i * 200);
+              });
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.3 },
+      );
+      observer.observe(featuresSection);
+    }
   });
 </script>
 
@@ -48,7 +101,7 @@
 </div>
 
 <!-- Features Section -->
-<div class="features-section py-5 bg-primary">
+<div class="features-section py-5 bg-primary" bind:this={featuresSection}>
   <div class="container text-center">
     <h2 class="fw-bold mb-2 text-warning" data-aos="fade-down">
       {$_("blog.features.heading")}
@@ -62,7 +115,9 @@
           <div class="icon-container mb-3">
             <i class="fa fa-university"></i>
           </div>
-          <h3 class="fw-bold">+11</h3>
+          <h3 class="fw-bold counter-number">
+            {counters[0].prefix}{counters[0].current}{counters[0].suffix}
+          </h3>
           <p>{$_("blog.features.cards.programStudy")}</p>
         </div>
       </div>
@@ -71,7 +126,9 @@
           <div class="icon-container mb-3">
             <i class="fa fa-user-graduate"></i>
           </div>
-          <h3 class="fw-bold">5000+</h3>
+          <h3 class="fw-bold counter-number">
+            {counters[1].prefix}{counters[1].current}{counters[1].suffix}
+          </h3>
           <p class="text-muted">{$_("blog.features.cards.alumni")}</p>
         </div>
       </div>
@@ -80,7 +137,9 @@
           <div class="icon-container mb-3">
             <i class="fa fa-users"></i>
           </div>
-          <h3 class="fw-bold">50+</h3>
+          <h3 class="fw-bold counter-number">
+            {counters[2].prefix}{counters[2].current}{counters[2].suffix}
+          </h3>
           <p class="text-muted">{$_("blog.features.cards.lecturers")}</p>
         </div>
       </div>
@@ -89,7 +148,9 @@
           <div class="icon-container mb-3">
             <i class="fa fa-trophy"></i>
           </div>
-          <h3 class="fw-bold">100+</h3>
+          <h3 class="fw-bold counter-number">
+            {counters[3].prefix}{counters[3].current}{counters[3].suffix}
+          </h3>
           <p class="text-muted">{$_("blog.features.cards.prestasi")}</p>
         </div>
       </div>
@@ -229,21 +290,33 @@
         <NoDataAvailable></NoDataAvailable>
       {:else}
         {#each testimonials as testimonial, index}
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay={index * 150}>
-            <div class="testimonial-card p-4 bg-white rounded shadow-sm">
-              <div class="testimonial-content mb-3">
-                <p class="text-muted">"{testimonial.content}"</p>
+          <div
+            class="col-md-6 col-lg-4 d-flex"
+            data-aos="fade-up"
+            data-aos-delay={index * 150}
+          >
+            <div
+              class="testimonial-card p-4 bg-white rounded shadow-sm d-flex flex-column w-100"
+            >
+              <div class="testimonial-quote-icon mb-2">
+                <i class="fas fa-quote-left"></i>
               </div>
-              <div class="testimonial-author d-flex">
+              <div class="testimonial-content flex-grow-1 mb-3">
+                <p class="text-muted testimonial-text">{testimonial.content}</p>
+              </div>
+              <div
+                class="testimonial-author d-flex align-items-center mt-auto pt-3 border-top"
+              >
                 <img
                   src={testimonial.image}
                   alt={testimonial.name}
                   class="rounded-circle me-3"
                   width="50"
                   height="50"
+                  style="object-fit: cover;"
                 />
                 <div>
-                  <h6 class="mb-0">{testimonial.name}</h6>
+                  <h6 class="mb-0 fw-semibold">{testimonial.name}</h6>
                   <small class="text-muted"
                     >{testimonial.position} {testimonial.company}</small
                   >
@@ -260,14 +333,40 @@
 <style>
   .testimonial-card {
     transition: transform 0.3s ease-in-out;
+    border-left: 4px solid #007bff;
+    overflow: hidden;
+    word-break: break-word;
   }
 
   .testimonial-card:hover {
     transform: translateY(-10px);
   }
 
+  .testimonial-quote-icon {
+    font-size: 1.5rem;
+    color: #007bff;
+    opacity: 0.3;
+  }
+
+  .testimonial-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
   .testimonial-author img {
     border: 2px solid #007bff;
+  }
+
+  .counter-number {
+    font-size: 2rem;
+    color: #007bff;
   }
 
   .text-sm {
@@ -298,7 +397,7 @@
     align-items: center;
     width: 90px;
     height: 90px;
-    background-color: rgba(0, 123, 255, 0.1); /* Warna background transparan */
+    background-color: rgba(0, 123, 255, 0.1);
     border-radius: 50%;
     margin: 0 auto;
     font-size: 25px;

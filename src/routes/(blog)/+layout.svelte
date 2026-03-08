@@ -12,6 +12,8 @@
 
   let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
+  let showScrollTop = $state(false);
+
   onMount(() => {
     if (typeof window !== "undefined" && (window as any).AOS) {
       (window as any).AOS.init({
@@ -21,7 +23,17 @@
         offset: 100,
       });
     }
+
+    const handleScroll = () => {
+      showScrollTop = window.scrollY > 300;
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   });
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 </script>
 
 <div class="topbar bg-primary py-2">
@@ -48,8 +60,58 @@
   <Footer></Footer>
 </footer>
 
+{#if showScrollTop}
+  <button
+    class="scroll-to-top"
+    onclick={scrollToTop}
+    aria-label="Scroll to top"
+  >
+    <i class="fas fa-chevron-up"></i>
+  </button>
+{/if}
+
 <style>
   :global(html) {
     scroll-behavior: smooth;
+  }
+
+  .scroll-to-top {
+    position: fixed;
+    bottom: 49px;
+    right: 30px;
+    z-index: 9999;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bs-primary, #007bff);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInUp 0.3s ease-out;
+    transition:
+      background 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .scroll-to-top:hover {
+    background: var(--bs-primary, #0056b3);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>
