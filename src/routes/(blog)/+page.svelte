@@ -366,7 +366,7 @@
 
   .counter-number {
     font-size: 2rem;
-    color: #007bff;
+    color: rgba(var(--bs-primary-rgb));
   }
 
   .text-sm {
